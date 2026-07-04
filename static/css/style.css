@@ -81,7 +81,7 @@ a:hover {
     margin: 0;
 }
 
-.logout-form button {
+.site-nav .logout-form button {
     padding: 0;
     border: none;
     background: none;
@@ -92,8 +92,9 @@ a:hover {
     cursor: pointer;
 }
 
-.logout-form button:hover {
+.site-nav .logout-form button:hover {
     text-decoration: underline;
+    opacity: 1;
 }
 
 /* Auth cards (login / register) */
