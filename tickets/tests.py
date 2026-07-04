@@ -261,3 +261,29 @@ class TicketCreateViewTests(TestCase):
         self.assertEqual(attachment.uploaded_by, self.user)
         self.assertEqual(attachment.message, ticket.messages.get())
         self.assertTrue(attachment.file.name.startswith("tickets/"))
+
+    def test_oversized_attachment_is_rejected(self):
+        self.client.force_login(self.user)
+        order = self._order(self.one_time_service)
+        big = SimpleUploadedFile(
+            "huge.txt", b"x" * (5 * 1024 * 1024 + 1), content_type="text/plain"
+        )
+        response = self.client.post(
+            reverse("tickets:create", args=[order.pk]),
+            self._valid_payload(attachments=big),
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(Ticket.objects.filter(order=order).exists())
+
+    def test_disallowed_extension_is_rejected(self):
+        self.client.force_login(self.user)
+        order = self._order(self.one_time_service)
+        bad = SimpleUploadedFile(
+            "virus.exe", b"malware", content_type="application/octet-stream"
+        )
+        response = self.client.post(
+            reverse("tickets:create", args=[order.pk]),
+            self._valid_payload(attachments=bad),
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(Ticket.objects.filter(order=order).exists())

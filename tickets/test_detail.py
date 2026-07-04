@@ -3,9 +3,10 @@ from django.test import TestCase
 from django.urls import reverse
 
 from departments.models import Department
+from logs.models import ActivityLog
 from orders.models import Order
 from services.models import Service
-from tickets.models import Message, Ticket
+from tickets.models import Credential, Message, Ticket
 
 User = get_user_model()
 
@@ -172,3 +173,53 @@ class ExpertActionTests(TicketDetailBase):
         self.client.post(self._url(), {"action": "assign"})
         self.ticket.refresh_from_db()
         self.assertIsNone(self.ticket.main_expert)
+
+
+class CredentialRevealTests(TicketDetailBase):
+    def setUp(self):
+        self.ticket.main_expert = self.expert
+        self.ticket.save(update_fields=["main_expert"])
+        self.credential = Credential.objects.create(
+            ticket=self.ticket,
+            site_admin_url="https://example.com/wp-admin",
+            site_username="siteuser",
+            site_password="s1te-secret-parola",
+            hosting_username="hostuser",
+            hosting_password="host-secret-parola",
+        )
+
+    def test_credentials_hidden_by_default(self):
+        self.client.force_login(self.expert)
+        response = self.client.get(self._url())
+        self.assertNotContains(response, "s1te-secret-parola")
+        self.assertContains(response, "Покажи достъпите")
+
+    def test_assigned_expert_can_reveal_and_it_is_logged(self):
+        self.client.force_login(self.expert)
+        response = self.client.post(self._url(), {"action": "reveal_credentials"})
+        self.assertContains(response, "s1te-secret-parola")
+        self.assertContains(response, "host-secret-parola")
+        self.assertTrue(
+            ActivityLog.objects.filter(
+                action="credential_revealed", ticket=self.ticket, actor=self.expert
+            ).exists()
+        )
+
+    def test_client_cannot_reveal_credentials(self):
+        self.client.force_login(self.client_user)
+        response = self.client.post(self._url(), {"action": "reveal_credentials"})
+        self.assertEqual(response.status_code, 404)
+        self.assertFalse(
+            ActivityLog.objects.filter(action="credential_revealed").exists()
+        )
+
+    def test_unassigned_expert_cannot_reveal_credentials(self):
+        other_expert = User.objects.create_user(
+            username="nenaznachen",
+            password="Baceparola123",
+            role=User.Role.EXPERT,
+            department=self.department,
+        )
+        self.client.force_login(other_expert)
+        response = self.client.post(self._url(), {"action": "reveal_credentials"})
+        self.assertEqual(response.status_code, 404)

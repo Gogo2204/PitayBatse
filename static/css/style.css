@@ -538,6 +538,31 @@ button[type="submit"]:hover {
     color: var(--color-muted);
 }
 
+.credential-list {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0.25rem 1rem;
+    margin: 0 0 var(--space);
+    padding: var(--space);
+    border: 1px solid #f0d79a;
+    border-radius: 6px;
+    background: #fffbf0;
+    word-break: break-word;
+}
+
+.credential-list dt {
+    color: var(--color-muted);
+}
+
+.credential-list dd {
+    margin: 0;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+}
+
+.reveal-form {
+    margin: 0 0 var(--space);
+}
+
 /* Dashboard status filter */
 .filter-bar {
     display: flex;

@@ -5,6 +5,7 @@ from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 
 from departments.models import Department
+from logs.models import ActivityLog
 from orders.models import Order
 
 from .forms import ExpertReplyForm, ReplyForm, TicketCreateForm
@@ -118,8 +119,10 @@ def detail(request, public_id):
         raise Http404
 
     expert_view = is_expert(request.user)
+    is_assigned_expert = expert_view and ticket.main_expert_id == request.user.id
     reply_form = ExpertReplyForm() if expert_view else ReplyForm()
     error = None
+    reveal_credentials = False
 
     if request.method == "POST":
         action = request.POST.get("action")
@@ -169,6 +172,17 @@ def detail(request, public_id):
                     ticket.priority = new_priority
                     ticket.save(update_fields=["priority"])
                 return redirect("tickets:detail", public_id=ticket.public_id)
+            elif action == "reveal_credentials":
+                if is_assigned_expert and hasattr(ticket, "credential"):
+                    reveal_credentials = True
+                    ActivityLog.objects.create(
+                        actor=request.user,
+                        action="credential_revealed",
+                        ticket=ticket,
+                        description=f"Разкрити достъпи за тикет „{ticket.name}“.",
+                    )
+                else:
+                    raise Http404
         except TicketWorkflowError as exc:
             error = str(exc)
 
@@ -188,11 +202,14 @@ def detail(request, public_id):
     context = {
         "ticket": ticket,
         "expert_view": expert_view,
+        "is_assigned_expert": is_assigned_expert,
         "is_resolved": ticket.status == Ticket.Status.RESOLVED,
         "public_messages": public_messages,
         "internal_messages": internal_messages,
         "reply_form": reply_form,
         "error": error,
+        "credential": getattr(ticket, "credential", None),
+        "reveal_credentials": reveal_credentials,
         "statuses": Ticket.Status.choices,
         "priorities": Ticket.Priority.choices,
         "departments": Department.objects.all(),

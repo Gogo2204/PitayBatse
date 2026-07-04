@@ -1,4 +1,33 @@
+import os
+
 from django import forms
+from django.core.exceptions import ValidationError
+
+MAX_UPLOAD_SIZE = 5 * 1024 * 1024
+ALLOWED_UPLOAD_EXTENSIONS = {
+    ".png",
+    ".jpg",
+    ".jpeg",
+    ".gif",
+    ".webp",
+    ".pdf",
+    ".txt",
+    ".log",
+    ".csv",
+    ".zip",
+    ".doc",
+    ".docx",
+}
+
+
+def validate_upload(uploaded):
+    if uploaded.size > MAX_UPLOAD_SIZE:
+        raise ValidationError("Файлът е твърде голям (максимум 5 MB).")
+    extension = os.path.splitext(uploaded.name)[1].lower()
+    if extension not in ALLOWED_UPLOAD_EXTENSIONS:
+        raise ValidationError(
+            f"Недопустим тип файл: {extension or 'без разширение'}."
+        )
 
 
 class MultipleFileInput(forms.ClearableFileInput):
@@ -31,7 +60,9 @@ class TicketCreateForm(forms.Form):
         ),
         input_formats=["%Y-%m-%dT%H:%M"],
     )
-    attachments = MultipleFileField(required=False, label="Файлове (по избор)")
+    attachments = MultipleFileField(
+        required=False, label="Файлове (по избор)", validators=[validate_upload]
+    )
 
     site_admin_url = forms.URLField(required=False, label="URL за админ панел")
     site_username = forms.CharField(
@@ -57,7 +88,9 @@ class ReplyForm(forms.Form):
         label="Съобщение",
         widget=forms.Textarea(attrs={"rows": 4}),
     )
-    attachments = MultipleFileField(required=False, label="Файлове (по избор)")
+    attachments = MultipleFileField(
+        required=False, label="Файлове (по избор)", validators=[validate_upload]
+    )
 
 
 class ExpertReplyForm(ReplyForm):
