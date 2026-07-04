@@ -6,22 +6,31 @@
 <section class="services">
     <h1>Услуги</h1>
 
-    {% if services %}
-        <ul class="service-grid">
-            {% for service in services %}
-                <li class="service-card">
-                    <h2>{{ service.name }}</h2>
-                    <p class="service-desc">{{ service.description }}</p>
-                    <p class="service-meta">
-                        <span class="service-price">{{ service.price }} €</span>
-                        <span class="service-type">{{ service.get_service_type_display }}</span>
-                    </p>
-                    <a class="button" href="{% url 'orders:create' service.pk %}">Поръчай</a>
-                </li>
-            {% endfor %}
-        </ul>
-    {% else %}
-        <p>В момента няма налични услуги.</p>
-    {% endif %}
+    {% for department in departments %}
+        <section class="department-section">
+            <h2>{{ department.name }}</h2>
+            {% if department.description %}
+                <p class="department-desc">{{ department.description }}</p>
+            {% endif %}
+
+            <div class="service-grid">
+                {% for service in department.active_services %}
+                    <article class="service-card">
+                        <h3 class="service-name">{{ service.name }}</h3>
+                        <p class="service-desc">{{ service.description }}</p>
+                        <p class="service-meta">
+                            <span class="service-price">{{ service.price }} €</span>
+                            <span class="badge {% if service.is_subscription %}badge-subscription{% else %}badge-onetime{% endif %}">
+                                {% if service.is_subscription %}Абонамент{% else %}Еднократно{% endif %}
+                            </span>
+                        </p>
+                        <a class="button" href="{% url 'orders:create' service.pk %}">Поръчай</a>
+                    </article>
+                {% endfor %}
+            </div>
+        </section>
+    {% empty %}
+        <p class="empty-state">В момента няма налични услуги.</p>
+    {% endfor %}
 </section>
 {% endblock %}

@@ -413,9 +413,18 @@ button[type="submit"]:hover {
 }
 
 /* Service catalog */
+.department-section {
+    margin-bottom: calc(var(--space) * 2);
+}
+
+.department-desc {
+    margin-top: -0.25rem;
+    color: var(--color-muted);
+}
+
 .service-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: var(--space);
     margin: 0;
     padding: 0;
@@ -429,9 +438,15 @@ button[type="submit"]:hover {
     border: 1px solid var(--color-border);
     border-radius: 6px;
     background: #fff;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 
-.service-card h2 {
+.service-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(27, 27, 27, 0.12);
+}
+
+.service-name {
     margin: 0 0 0.5rem;
     padding: 0;
     border: none;
@@ -445,7 +460,7 @@ button[type="submit"]:hover {
 
 .service-meta {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     justify-content: space-between;
     gap: 0.5rem;
     margin: 0.75rem 0;
@@ -456,9 +471,16 @@ button[type="submit"]:hover {
     font-size: 1.05rem;
 }
 
-.service-type {
-    color: var(--color-muted);
-    font-size: 0.85rem;
+.badge-subscription {
+    background: var(--color-accent-weak);
+    color: var(--color-accent);
+    border-color: #c5d8ec;
+}
+
+.badge-onetime {
+    background: #eceff1;
+    color: #4b5a68;
+    border-color: #d4dae0;
 }
 
 .service-card .button {
