@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Услуги — ПитайБаце{% endblock %}
+
+{% block content %}
+<section class="services">
+    <h1>Услуги</h1>
+
+    {% if services %}
+        <ul class="service-grid">
+            {% for service in services %}
+                <li class="service-card">
+                    <h2>{{ service.name }}</h2>
+                    <p class="service-desc">{{ service.description }}</p>
+                    <p class="service-meta">
+                        <span class="service-price">{{ service.price }} лв.</span>
+                        <span class="service-type">{{ service.get_service_type_display }}</span>
+                    </p>
+                    <a class="button" href="#">Поръчай</a>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>В момента няма налични услуги.</p>
+    {% endif %}
+</section>
+{% endblock %}

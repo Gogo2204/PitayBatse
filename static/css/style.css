@@ -161,3 +161,67 @@ button[type="submit"]:hover {
     margin-top: var(--space);
     font-size: 0.9rem;
 }
+
+/* Shared button-styled link */
+.button {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    background: var(--color-accent);
+    color: #fff;
+    font-weight: 600;
+}
+
+.button:hover {
+    opacity: 0.9;
+    text-decoration: none;
+}
+
+/* Service catalog */
+.service-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: var(--space);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.service-card {
+    display: flex;
+    flex-direction: column;
+    padding: var(--space);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+}
+
+.service-card h2 {
+    margin: 0 0 0.5rem;
+    font-size: 1.15rem;
+}
+
+.service-desc {
+    flex: 1;
+    color: var(--color-muted);
+}
+
+.service-meta {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin: 0.75rem 0;
+}
+
+.service-price {
+    font-weight: 700;
+}
+
+.service-type {
+    color: var(--color-muted);
+    font-size: 0.85rem;
+}
+
+.service-card .button {
+    align-self: flex-start;
+}
