@@ -12,12 +12,14 @@
         <a class="logo" href="/">ПитайБаце</a>
         <nav class="site-nav">
             <ul>
-                <li><a href="/">Начало</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'accounts:dashboard' %}">Начало</a></li>
+                {% else %}
+                    <li><a href="/">Начало</a></li>
+                {% endif %}
                 <li><a href="{% url 'services:list' %}">Услуги</a></li>
-                <li><a href="/orders/">Поръчки</a></li>
                 <li><a href="{% url 'tickets:index' %}">Тикети</a></li>
                 {% if user.is_authenticated %}
-                    <li><a href="{% url 'accounts:dashboard' %}">Табло</a></li>
                     {% if user.is_superuser or user.role == 'expert' %}
                         <li><a href="{% url 'staff:tickets' %}">Експертен панел</a></li>
                     {% endif %}
