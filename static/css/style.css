@@ -50,6 +50,7 @@ a:hover {
 
 .site-nav ul {
     display: flex;
+    align-items: center;
     gap: var(--space);
     margin: 0;
     padding: 0;
@@ -86,6 +87,8 @@ a:hover {
     background: none;
     color: var(--color-accent);
     font: inherit;
+    line-height: inherit;
+    vertical-align: baseline;
     cursor: pointer;
 }
 
