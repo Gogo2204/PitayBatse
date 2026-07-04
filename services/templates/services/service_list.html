@@ -16,7 +16,7 @@
                         <span class="service-price">{{ service.price }} €</span>
                         <span class="service-type">{{ service.get_service_type_display }}</span>
                     </p>
-                    <a class="button" href="#">Поръчай</a>
+                    <a class="button" href="{% url 'orders:create' service.pk %}">Поръчай</a>
                 </li>
             {% endfor %}
         </ul>

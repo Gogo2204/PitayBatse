@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}Плащане — Поръчка #{{ order.pk }}{% endblock %}
+
+{% block content %}
+<section class="payment">
+    <h1>Плащане</h1>
+
+    {% if error %}
+        <div class="form-errors"><p>{{ error }}</p></div>
+    {% endif %}
+
+    <ul class="payment-details">
+        <li><span>Услуга:</span> {{ order.service.name }}</li>
+        {% if order.billing_cycle %}
+            <li><span>Период:</span> {{ order.get_billing_cycle_display }}</li>
+        {% endif %}
+        <li><span>Начин на плащане:</span> {{ order.get_payment_method_display }}</li>
+        <li><span>Сума за плащане:</span> <strong>{{ order.amount }} €</strong></li>
+    </ul>
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Плати</button>
+    </form>
+</section>
+{% endblock %}

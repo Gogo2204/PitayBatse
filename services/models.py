@@ -26,3 +26,7 @@ class Service(models.Model):
 
     def __str__(self):
         return self.name
+
+    @property
+    def is_subscription(self):
+        return self.service_type == self.ServiceType.SUBSCRIPTION
