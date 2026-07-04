@@ -117,6 +117,8 @@ h2 {
 }
 
 .site-nav .logout-form button:hover {
+    background: none;
+    color: var(--color-accent);
     text-decoration: underline;
     opacity: 1;
 }
