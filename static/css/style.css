@@ -123,6 +123,64 @@ h2 {
     opacity: 1;
 }
 
+/* Avatars */
+.avatar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    object-fit: cover;
+    vertical-align: middle;
+}
+
+.avatar-initials {
+    background: var(--color-accent);
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}
+
+.avatar-lg {
+    width: 5rem;
+    height: 5rem;
+    font-size: 1.6rem;
+}
+
+.nav-avatar {
+    display: inline-flex;
+}
+
+.nav-avatar:hover {
+    text-decoration: none;
+    opacity: 0.9;
+}
+
+.profile-summary {
+    display: flex;
+    align-items: center;
+    gap: var(--space);
+    margin-bottom: var(--space);
+}
+
+.profile-info {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 0.2rem 1rem;
+    margin: 0;
+}
+
+.profile-info dt {
+    color: var(--color-muted);
+}
+
+.profile-info dd {
+    margin: 0;
+}
+
 /* Status badges */
 .badge {
     display: inline-block;

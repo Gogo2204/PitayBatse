@@ -20,6 +20,7 @@ class User(AbstractUser):
         on_delete=models.SET_NULL,
         related_name="experts",
     )
+    avatar = models.ImageField(upload_to="avatars/", blank=True, null=True)
 
     def clean(self):
         super().clean()
@@ -27,3 +28,10 @@ class User(AbstractUser):
             raise ValidationError(
                 {"department": "Експертът трябва да принадлежи към отдел."}
             )
+
+    @property
+    def initials(self):
+        parts = [part for part in (self.first_name, self.last_name) if part.strip()]
+        if parts:
+            return "".join(part.strip()[0] for part in parts).upper()
+        return self.username[:2].upper()

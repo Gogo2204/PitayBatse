@@ -24,6 +24,15 @@
                         <li><a href="{% url 'staff:tickets' %}">Експертен панел</a></li>
                     {% endif %}
                     <li>
+                        <a class="nav-avatar" href="{% url 'accounts:profile' %}" title="Профил">
+                            {% if user.avatar %}
+                                <img class="avatar" src="{{ user.avatar.url }}" alt="Профил">
+                            {% else %}
+                                <span class="avatar avatar-initials">{{ user.initials }}</span>
+                            {% endif %}
+                        </a>
+                    </li>
+                    <li>
                         <form class="logout-form" action="{% url 'accounts:logout' %}" method="post">
                             {% csrf_token %}
                             <button type="submit">Изход</button>
