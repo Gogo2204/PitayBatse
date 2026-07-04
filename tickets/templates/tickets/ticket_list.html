@@ -22,7 +22,7 @@
                         <tr>
                             <td><a href="{% url 'tickets:detail' ticket.public_id %}">{{ ticket.name }}</a></td>
                             <td>{{ ticket.order.service.name }}</td>
-                            <td>{{ ticket.get_status_display }}</td>
+                            <td><span class="badge badge-{{ ticket.status }}">{{ ticket.get_status_display }}</span></td>
                             <td>{{ ticket.created_at|date:"d.m.Y" }}</td>
                         </tr>
                     {% endfor %}

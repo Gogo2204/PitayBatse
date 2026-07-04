@@ -24,7 +24,7 @@
                     <td>{{ order.user.username }}</td>
                     <td>{{ order.service.name }}</td>
                     <td>{{ order.amount }} €</td>
-                    <td>{{ order.get_status_display }}</td>
+                    <td><span class="badge badge-{{ order.status }}">{{ order.get_status_display }}</span></td>
                     <td>{{ order.created_at|date:"d.m.Y" }}</td>
                 </tr>
             {% endfor %}

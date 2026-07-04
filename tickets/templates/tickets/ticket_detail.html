@@ -8,7 +8,7 @@
 
     <dl class="ticket-meta">
         <dt>Номер</dt><dd>{{ ticket.public_id }}</dd>
-        <dt>Статус</dt><dd>{{ ticket.get_status_display }}</dd>
+        <dt>Статус</dt><dd><span class="badge badge-{{ ticket.status }}">{{ ticket.get_status_display }}</span></dd>
         <dt>Приоритет</dt><dd>{{ ticket.get_priority_display }}</dd>
         <dt>Краен срок</dt><dd>{% if ticket.deadline %}{{ ticket.deadline|date:"d.m.Y H:i" }}{% else %}—{% endif %}</dd>
         <dt>Създаден</dt><dd>{{ ticket.created_at|date:"d.m.Y H:i" }}</dd>

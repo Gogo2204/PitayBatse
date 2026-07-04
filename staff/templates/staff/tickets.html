@@ -35,7 +35,7 @@
                 {% for ticket in tickets %}
                     <tr class="{% if ticket.status == 'open' and not ticket.main_expert_id %}unassigned{% endif %}">
                         <td><a href="{% url 'tickets:detail' ticket.public_id %}">{{ ticket.name }}</a></td>
-                        <td>{{ ticket.get_status_display }}</td>
+                        <td><span class="badge badge-{{ ticket.status }}">{{ ticket.get_status_display }}</span></td>
                         <td>{{ ticket.get_priority_display }}</td>
                         <td>{{ ticket.department.name }}</td>
                         <td>{% if ticket.main_expert %}{{ ticket.main_expert.username }}{% else %}—{% endif %}</td>

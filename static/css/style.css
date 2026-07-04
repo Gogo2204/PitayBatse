@@ -1,11 +1,18 @@
+/* ПитайБаце — hand-written CSS. No frameworks. Simple, readable, utilitarian. */
+
 :root {
+    --color-page: #eceef1;
     --color-bg: #ffffff;
-    --color-text: #1a1a1a;
-    --color-muted: #666666;
-    --color-accent: #2b6cb0;
-    --color-border: #e2e2e2;
-    --max-width: 960px;
+    --color-text: #1b1b1b;
+    --color-muted: #5f6b7a;
+    --color-accent: #1f5c9e;
+    --color-accent-weak: #eaf1f8;
+    --color-border: #d6dbe1;
+    --color-border-strong: #b7c0ca;
+    --color-danger: #b00020;
+    --max-width: 980px;
     --space: 1rem;
+    --radius: 4px;
 }
 
 * {
@@ -14,10 +21,10 @@
 
 body {
     margin: 0;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
     line-height: 1.6;
     color: var(--color-text);
-    background: var(--color-bg);
+    background: var(--color-page);
 }
 
 a {
@@ -29,53 +36,73 @@ a:hover {
     text-decoration: underline;
 }
 
-/* Header + navigation */
+h1 {
+    font-size: 1.6rem;
+    margin: 0 0 var(--space);
+}
+
+h2 {
+    font-size: 1.2rem;
+    margin: calc(var(--space) * 1.5) 0 var(--space);
+    padding-bottom: 0.3rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
+/* Page column ("sheet" on a grey background) */
+.site-header,
+.site-main,
+.site-footer {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    background: var(--color-bg);
+    border-left: 1px solid var(--color-border);
+    border-right: 1px solid var(--color-border);
+}
+
 .site-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
     gap: var(--space);
-    max-width: var(--max-width);
-    margin: 0 auto;
-    padding: var(--space);
-    border-bottom: 1px solid var(--color-border);
+    padding: 0.75rem var(--space);
+    margin-top: var(--space);
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border-strong);
 }
 
 .logo {
     font-size: 1.25rem;
     font-weight: 700;
     color: var(--color-text);
+    letter-spacing: 0.01em;
 }
 
 .site-nav ul {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: var(--space);
     margin: 0;
     padding: 0;
     list-style: none;
 }
 
-/* Main content */
 .site-main {
-    max-width: var(--max-width);
-    margin: 0 auto;
-    padding: calc(var(--space) * 2) var(--space);
+    padding: calc(var(--space) * 1.5) var(--space);
     min-height: 60vh;
 }
 
-/* Footer */
 .site-footer {
-    max-width: var(--max-width);
-    margin: 0 auto;
     padding: var(--space);
-    border-top: 1px solid var(--color-border);
+    margin-bottom: var(--space);
+    border-top: 1px solid var(--color-border-strong);
+    border-bottom: 1px solid var(--color-border);
     color: var(--color-muted);
     font-size: 0.9rem;
 }
 
-/* Navigation logout button styled as a link */
+/* Logout control styled to match the other header links */
 .logout-form {
     display: inline;
     margin: 0;
@@ -97,13 +124,145 @@ a:hover {
     opacity: 1;
 }
 
-/* Auth cards (login / register) */
-.auth-card {
-    max-width: 26rem;
+/* Status badges */
+.badge {
+    display: inline-block;
+    padding: 0.1rem 0.5rem;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.5;
+    white-space: nowrap;
 }
 
-.auth-card h1 {
-    margin-top: 0;
+.badge-open {
+    background: #e7eef6;
+    color: #1f5c9e;
+    border-color: #c5d8ec;
+}
+
+.badge-in_progress {
+    background: #fbecc9;
+    color: #8a5a00;
+    border-color: #f0d79a;
+}
+
+.badge-waiting_reply {
+    background: #ece6f7;
+    color: #5b3ca8;
+    border-color: #d6c9ef;
+}
+
+.badge-client_replied {
+    background: #d9f0ec;
+    color: #00695c;
+    border-color: #b3e0d8;
+}
+
+.badge-resolved {
+    background: #dff1e2;
+    color: #1e7e34;
+    border-color: #b7e0c0;
+}
+
+.badge-pending {
+    background: #eceff1;
+    color: #4b5a68;
+    border-color: #d4dae0;
+}
+
+.badge-paid {
+    background: #dff1e2;
+    color: #1e7e34;
+    border-color: #b7e0c0;
+}
+
+.badge-failed {
+    background: #fbe0dd;
+    color: #b71c1c;
+    border-color: #f0c1bc;
+}
+
+.badge-cancelled {
+    background: #e6e8ea;
+    color: #556370;
+    border-color: #d2d6da;
+}
+
+/* Tables */
+.table-wrap {
+    overflow-x: auto;
+}
+
+.ticket-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid var(--color-border);
+}
+
+.ticket-table th,
+.ticket-table td {
+    padding: 0.5rem 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.ticket-table th {
+    background: #f0f2f5;
+    border-bottom: 2px solid var(--color-border-strong);
+    color: var(--color-muted);
+    font-size: 0.8rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+.ticket-table tbody tr:hover {
+    background: #f6f9fc;
+}
+
+.ticket-table tr.unassigned {
+    background: var(--color-accent-weak);
+    font-weight: 600;
+}
+
+.ticket-table tr.unassigned td:first-child {
+    border-left: 3px solid var(--color-accent);
+}
+
+.empty-state {
+    color: var(--color-muted);
+}
+
+/* Forms */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="url"],
+input[type="datetime-local"],
+input[type="number"],
+select,
+textarea {
+    padding: 0.5rem;
+    border: 1px solid var(--color-border-strong);
+    border-radius: var(--radius);
+    background: #fff;
+    color: inherit;
+    font: inherit;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 1px;
+    border-color: var(--color-accent);
+}
+
+textarea {
+    width: 100%;
+    min-height: 6rem;
+    resize: vertical;
 }
 
 .form-row {
@@ -117,13 +276,6 @@ a:hover {
     font-weight: 600;
 }
 
-.form-row input {
-    padding: 0.5rem;
-    border: 1px solid var(--color-border);
-    border-radius: 4px;
-    font: inherit;
-}
-
 .help-text {
     margin-top: 0.25rem;
     color: var(--color-muted);
@@ -132,7 +284,7 @@ a:hover {
 
 .field-error,
 .form-errors {
-    color: #b00020;
+    color: var(--color-danger);
     font-size: 0.9rem;
 }
 
@@ -143,42 +295,53 @@ a:hover {
 .form-errors {
     margin-bottom: var(--space);
     padding: 0.5rem 0.75rem;
-    border: 1px solid #b00020;
-    border-radius: 4px;
+    border: 1px solid var(--color-danger);
+    border-radius: var(--radius);
+    background: #fdecea;
 }
 
 button[type="submit"] {
     padding: 0.55rem 1.1rem;
-    border: none;
-    border-radius: 4px;
+    border: 1px solid var(--color-accent);
+    border-radius: var(--radius);
     background: var(--color-accent);
     color: #fff;
     font: inherit;
+    font-weight: 600;
     cursor: pointer;
 }
 
 button[type="submit"]:hover {
-    opacity: 0.9;
-}
-
-.auth-alt {
-    margin-top: var(--space);
-    font-size: 0.9rem;
+    background: #17497e;
 }
 
 /* Shared button-styled link */
 .button {
     display: inline-block;
     padding: 0.5rem 1rem;
-    border-radius: 4px;
+    border-radius: var(--radius);
     background: var(--color-accent);
     color: #fff;
     font-weight: 600;
 }
 
 .button:hover {
-    opacity: 0.9;
+    background: #17497e;
     text-decoration: none;
+}
+
+/* Auth cards (login / register) */
+.auth-card {
+    max-width: 26rem;
+}
+
+.auth-card h1 {
+    margin-top: 0;
+}
+
+.auth-alt {
+    margin-top: var(--space);
+    font-size: 0.9rem;
 }
 
 /* Service catalog */
@@ -197,10 +360,13 @@ button[type="submit"]:hover {
     padding: var(--space);
     border: 1px solid var(--color-border);
     border-radius: 6px;
+    background: #fff;
 }
 
 .service-card h2 {
     margin: 0 0 0.5rem;
+    padding: 0;
+    border: none;
     font-size: 1.15rem;
 }
 
@@ -219,6 +385,7 @@ button[type="submit"]:hover {
 
 .service-price {
     font-weight: 700;
+    font-size: 1.05rem;
 }
 
 .service-type {
@@ -248,6 +415,7 @@ button[type="submit"]:hover {
     border: 1px solid var(--color-border);
     border-radius: 6px;
     list-style: none;
+    background: #fafbfc;
 }
 
 .payment-details li {
@@ -269,21 +437,14 @@ button[type="submit"]:hover {
 .notices {
     margin-bottom: var(--space);
     padding: 0.5rem 0.75rem;
-    border: 1px solid var(--color-border);
-    border-radius: 4px;
-    background: rgba(43, 108, 176, 0.06);
+    border: 1px solid #c5d8ec;
+    border-left: 4px solid var(--color-accent);
+    border-radius: var(--radius);
+    background: var(--color-accent-weak);
 }
 
 .notices p {
     margin: 0.2rem 0;
-}
-
-.ticket-form textarea {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid var(--color-border);
-    border-radius: 4px;
-    font: inherit;
 }
 
 /* Ticket detail */
@@ -292,6 +453,10 @@ button[type="submit"]:hover {
     grid-template-columns: max-content 1fr;
     gap: 0.25rem 1rem;
     margin: 0 0 var(--space);
+    padding: var(--space);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    background: #fafbfc;
 }
 
 .ticket-meta dt {
@@ -309,14 +474,17 @@ button[type="submit"]:hover {
 }
 
 .message {
-    padding: 0.75rem;
+    padding: 0.6rem 0.75rem;
     margin-bottom: 0.5rem;
     border: 1px solid var(--color-border);
-    border-radius: 6px;
+    border-left: 4px solid var(--color-accent);
+    border-radius: var(--radius);
+    background: #fff;
 }
 
 .message-list.internal .message {
-    background: rgba(176, 0, 32, 0.05);
+    border-left-color: #c98a00;
+    background: #fff8e6;
 }
 
 .message-head {
@@ -341,14 +509,6 @@ button[type="submit"]:hover {
     font-size: 0.9rem;
 }
 
-.ticket-detail textarea {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid var(--color-border);
-    border-radius: 4px;
-    font: inherit;
-}
-
 .resolve-form {
     margin: var(--space) 0;
 }
@@ -366,36 +526,15 @@ button[type="submit"]:hover {
     margin-bottom: 0.6rem;
 }
 
+.control-form details {
+    margin: 0;
+}
+
 .resolved-note {
     padding: 0.5rem 0.75rem;
     border: 1px solid var(--color-border);
-    border-radius: 4px;
-    color: var(--color-muted);
-}
-
-/* Ticket list */
-.table-wrap {
-    overflow-x: auto;
-}
-
-.ticket-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-.ticket-table th,
-.ticket-table td {
-    padding: 0.5rem 0.75rem;
-    text-align: left;
-    border-bottom: 1px solid var(--color-border);
-}
-
-.ticket-table th {
-    color: var(--color-muted);
-    font-weight: 600;
-}
-
-.empty-state {
+    border-radius: var(--radius);
+    background: #fafbfc;
     color: var(--color-muted);
 }
 
@@ -408,10 +547,16 @@ button[type="submit"]:hover {
 }
 
 .filter-bar a {
-    padding: 0.25rem 0.6rem;
-    border: 1px solid var(--color-border);
+    padding: 0.2rem 0.7rem;
+    border: 1px solid var(--color-border-strong);
     border-radius: 999px;
     font-size: 0.9rem;
+    color: var(--color-text);
+}
+
+.filter-bar a:hover {
+    text-decoration: none;
+    border-color: var(--color-accent);
 }
 
 .filter-bar a.active {
@@ -428,17 +573,12 @@ button[type="submit"]:hover {
     gap: var(--space);
     margin-bottom: var(--space);
     padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--color-border);
+    border-bottom: 2px solid var(--color-border-strong);
 }
 
 .sort-bar {
     color: var(--color-muted);
     font-size: 0.9rem;
-}
-
-.ticket-table tr.unassigned {
-    background: rgba(43, 108, 176, 0.08);
-    font-weight: 600;
 }
 
 .pagination {
@@ -447,4 +587,49 @@ button[type="submit"]:hover {
     align-items: center;
     margin-top: var(--space);
     color: var(--color-muted);
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+    :root {
+        --space: 0.85rem;
+    }
+
+    .site-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    h1 {
+        font-size: 1.35rem;
+    }
+
+    .ticket-meta {
+        grid-template-columns: 1fr;
+        gap: 0 0;
+    }
+
+    .ticket-meta dt {
+        margin-top: 0.5rem;
+    }
+
+    .control-form {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .control-form select,
+    .control-form button {
+        width: 100%;
+    }
+
+    input,
+    select,
+    textarea {
+        width: 100%;
+    }
+
+    .service-grid {
+        grid-template-columns: 1fr;
+    }
 }
