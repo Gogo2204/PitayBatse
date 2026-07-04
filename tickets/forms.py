@@ -50,3 +50,15 @@ class TicketCreateForm(forms.Form):
         label="Парола за хостинг",
         widget=forms.PasswordInput(render_value=False),
     )
+
+
+class ReplyForm(forms.Form):
+    body = forms.CharField(
+        label="Съобщение",
+        widget=forms.Textarea(attrs={"rows": 4}),
+    )
+    attachments = MultipleFileField(required=False, label="Файлове (по избор)")
+
+
+class ExpertReplyForm(ReplyForm):
+    is_internal = forms.BooleanField(required=False, label="Вътрешна бележка")

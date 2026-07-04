@@ -1,11 +1,21 @@
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
+from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 
+from departments.models import Department
 from orders.models import Order
 
-from .forms import TicketCreateForm
+from .forms import ExpertReplyForm, ReplyForm, TicketCreateForm
 from .models import Attachment, Credential, Message, Ticket
+from .services import (
+    TicketWorkflowError,
+    add_message,
+    assign_main_expert,
+    change_status,
+    is_expert,
+    resolve,
+)
 
 
 def build_form_notices(order):
@@ -18,6 +28,16 @@ def build_form_notices(order):
     return notices
 
 
+def _can_access(user, ticket):
+    if ticket.client_id == user.id:
+        return True
+    if is_expert(user):
+        if user.is_superuser:
+            return True
+        return user.department_id is not None and ticket.department_id == user.department_id
+    return False
+
+
 @login_required
 def create(request, order_id):
     order = get_object_or_404(Order, pk=order_id, user=request.user)
@@ -26,7 +46,7 @@ def create(request, order_id):
         return redirect("orders:pay", order_id=order.pk)
 
     if hasattr(order, "ticket"):
-        return redirect("accounts:dashboard")
+        return redirect("tickets:detail", public_id=order.ticket.public_id)
 
     if request.method == "POST":
         form = TicketCreateForm(request.POST, request.FILES)
@@ -63,7 +83,7 @@ def create(request, order_id):
                     )
                 ticket.last_message_at = message.created_at
                 ticket.save(update_fields=["last_message_at"])
-            return redirect("accounts:dashboard")
+            return redirect("tickets:detail", public_id=ticket.public_id)
     else:
         form = TicketCreateForm()
 
@@ -74,3 +94,95 @@ def create(request, order_id):
         "notices": build_form_notices(order),
     }
     return render(request, "tickets/ticket_form.html", context)
+
+
+@login_required
+def detail(request, public_id):
+    ticket = get_object_or_404(
+        Ticket.objects.select_related("client", "department", "main_expert"),
+        public_id=public_id,
+    )
+    if not _can_access(request.user, ticket):
+        raise Http404
+
+    expert_view = is_expert(request.user)
+    reply_form = ExpertReplyForm() if expert_view else ReplyForm()
+    error = None
+
+    if request.method == "POST":
+        action = request.POST.get("action")
+        try:
+            if action == "reply":
+                form_class = ExpertReplyForm if expert_view else ReplyForm
+                reply_form = form_class(request.POST, request.FILES)
+                if reply_form.is_valid():
+                    data = reply_form.cleaned_data
+                    is_internal = expert_view and data.get("is_internal", False)
+                    with transaction.atomic():
+                        message = add_message(
+                            ticket, request.user, data["body"], is_internal=is_internal
+                        )
+                        for uploaded in data.get("attachments", []):
+                            Attachment.objects.create(
+                                ticket=ticket,
+                                message=message,
+                                uploaded_by=request.user,
+                                file=uploaded,
+                            )
+                    return redirect("tickets:detail", public_id=ticket.public_id)
+            elif action == "resolve":
+                resolve(ticket, request.user)
+                return redirect("tickets:detail", public_id=ticket.public_id)
+            elif action == "assign" and expert_view:
+                assign_main_expert(ticket, request.user, actor=request.user)
+                return redirect("tickets:detail", public_id=ticket.public_id)
+            elif action == "status" and expert_view:
+                change_status(
+                    ticket,
+                    request.POST.get("status"),
+                    actor=request.user,
+                    reason="Ръчна промяна на статуса.",
+                )
+                return redirect("tickets:detail", public_id=ticket.public_id)
+            elif action == "department" and expert_view:
+                department = get_object_or_404(
+                    Department, pk=request.POST.get("department")
+                )
+                ticket.department = department
+                ticket.save(update_fields=["department"])
+                return redirect("tickets:detail", public_id=ticket.public_id)
+            elif action == "priority" and expert_view:
+                new_priority = request.POST.get("priority")
+                if new_priority in Ticket.Priority.values:
+                    ticket.priority = new_priority
+                    ticket.save(update_fields=["priority"])
+                return redirect("tickets:detail", public_id=ticket.public_id)
+        except TicketWorkflowError as exc:
+            error = str(exc)
+
+    public_messages = (
+        ticket.messages.filter(is_internal=False)
+        .select_related("author")
+        .prefetch_related("attachments")
+    )
+    internal_messages = (
+        ticket.messages.filter(is_internal=True)
+        .select_related("author")
+        .prefetch_related("attachments")
+        if expert_view
+        else []
+    )
+
+    context = {
+        "ticket": ticket,
+        "expert_view": expert_view,
+        "is_resolved": ticket.status == Ticket.Status.RESOLVED,
+        "public_messages": public_messages,
+        "internal_messages": internal_messages,
+        "reply_form": reply_form,
+        "error": error,
+        "statuses": Ticket.Status.choices,
+        "priorities": Ticket.Priority.choices,
+        "departments": Department.objects.all(),
+    }
+    return render(request, "tickets/ticket_detail.html", context)

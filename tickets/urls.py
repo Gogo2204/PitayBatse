@@ -6,4 +6,5 @@ app_name = "tickets"
 
 urlpatterns = [
     path("create/<int:order_id>/", views.create, name="create"),
+    path("<uuid:public_id>/", views.detail, name="detail"),
 ]

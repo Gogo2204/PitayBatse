@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block title %}Тикет — {{ ticket.name }}{% endblock %}
+
+{% block content %}
+<section class="ticket-detail">
+    <h1>{{ ticket.name }}</h1>
+
+    <dl class="ticket-meta">
+        <dt>Номер</dt><dd>{{ ticket.public_id }}</dd>
+        <dt>Статус</dt><dd>{{ ticket.get_status_display }}</dd>
+        <dt>Приоритет</dt><dd>{{ ticket.get_priority_display }}</dd>
+        <dt>Краен срок</dt><dd>{% if ticket.deadline %}{{ ticket.deadline|date:"d.m.Y H:i" }}{% else %}—{% endif %}</dd>
+        <dt>Създаден</dt><dd>{{ ticket.created_at|date:"d.m.Y H:i" }}</dd>
+        <dt>Последно съобщение</dt>
+        <dd>{% if ticket.last_message_at %}преди {{ ticket.last_message_at|timesince }}{% else %}—{% endif %}</dd>
+    </dl>
+
+    {% if error %}
+        <div class="form-errors"><p>{{ error }}</p></div>
+    {% endif %}
+
+    <h2>Разговор</h2>
+    <ul class="message-list">
+        {% for message in public_messages %}
+            <li class="message">
+                <p class="message-head">
+                    <strong>{{ message.author.username }}</strong>
+                    <span class="message-time">{{ message.created_at|date:"d.m.Y H:i" }}</span>
+                </p>
+                <p class="message-body">{{ message.body|linebreaksbr }}</p>
+                {% if message.attachments.all %}
+                    <ul class="attachment-list">
+                        {% for attachment in message.attachments.all %}
+                            <li><a href="{{ attachment.file.url }}">{{ attachment.file.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </li>
+        {% empty %}
+            <li class="message-empty">Все още няма съобщения.</li>
+        {% endfor %}
+    </ul>
+
+    {% if expert_view %}
+        <h2>Вътрешни бележки</h2>
+        <ul class="message-list internal">
+            {% for message in internal_messages %}
+                <li class="message">
+                    <p class="message-head">
+                        <strong>{{ message.author.username }}</strong>
+                        <span class="message-time">{{ message.created_at|date:"d.m.Y H:i" }}</span>
+                    </p>
+                    <p class="message-body">{{ message.body|linebreaksbr }}</p>
+                </li>
+            {% empty %}
+                <li class="message-empty">Няма вътрешни бележки.</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if expert_view or not is_resolved %}
+        <h2>Отговор</h2>
+        <form method="post" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+            <input type="hidden" name="action" value="reply">
+            {% for field in reply_form %}
+                <div class="form-row">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% for err in field.errors %}<p class="field-error">{{ err }}</p>{% endfor %}
+                </div>
+            {% endfor %}
+            <button type="submit">Изпрати</button>
+        </form>
+    {% else %}
+        <p class="resolved-note">Тикетът е приключен. Само експерт може да предприема действия.</p>
+    {% endif %}
+
+    {% if not is_resolved and not expert_view %}
+        <form method="post" class="resolve-form">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="resolve">
+            <button type="submit">Оправено е, баце</button>
+        </form>
+    {% endif %}
+
+    {% if expert_view %}
+        <section class="expert-controls">
+            <h2>Управление</h2>
+
+            <form method="post" class="control-form">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="assign">
+                <button type="submit">Поеми тикета</button>
+            </form>
+
+            <form method="post" class="control-form">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="status">
+                <label for="status-select">Статус</label>
+                <select id="status-select" name="status">
+                    {% for value, label in statuses %}
+                        <option value="{{ value }}" {% if value == ticket.status %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit">Смени статуса</button>
+            </form>
+
+            <form method="post" class="control-form">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="department">
+                <label for="department-select">Отдел</label>
+                <select id="department-select" name="department">
+                    {% for department in departments %}
+                        <option value="{{ department.pk }}" {% if department.pk == ticket.department_id %}selected{% endif %}>{{ department.name }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit">Смени отдела</button>
+            </form>
+
+            <form method="post" class="control-form">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="priority">
+                <label for="priority-select">Приоритет</label>
+                <select id="priority-select" name="priority">
+                    {% for value, label in priorities %}
+                        <option value="{{ value }}" {% if value == ticket.priority %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit">Смени приоритета</button>
+            </form>
+        </section>
+    {% endif %}
+</section>
+{% endblock %}

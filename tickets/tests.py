@@ -205,9 +205,11 @@ class TicketCreateViewTests(TestCase):
         response = self.client.post(
             reverse("tickets:create", args=[order.pk]), self._valid_payload()
         )
-        self.assertRedirects(response, reverse("accounts:dashboard"))
-
         ticket = Ticket.objects.get(order=order)
+        self.assertRedirects(
+            response, reverse("tickets:detail", args=[ticket.public_id])
+        )
+
         self.assertEqual(ticket.status, Ticket.Status.OPEN)
         self.assertEqual(ticket.department, self.department)
         self.assertEqual(ticket.client, self.user)
@@ -229,9 +231,12 @@ class TicketCreateViewTests(TestCase):
         self.client.post(
             reverse("tickets:create", args=[order.pk]), self._valid_payload()
         )
+        ticket = Ticket.objects.get(order=order)
 
         response = self.client.get(reverse("tickets:create", args=[order.pk]))
-        self.assertRedirects(response, reverse("accounts:dashboard"))
+        self.assertRedirects(
+            response, reverse("tickets:detail", args=[ticket.public_id])
+        )
 
         self.client.post(
             reverse("tickets:create", args=[order.pk]),
