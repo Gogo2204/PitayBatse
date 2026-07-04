@@ -20,6 +20,7 @@
             <table class="ticket-table">
                 <thead>
                     <tr>
+                        <th>№</th>
                         <th>Заглавие</th>
                         <th>Статус</th>
                         <th>Приоритет</th>
@@ -31,6 +32,7 @@
                 <tbody>
                     {% for ticket in tickets %}
                         <tr>
+                            <td class="ticket-code">#{{ ticket.short_code }}</td>
                             <td><a href="{% url 'tickets:detail' ticket.public_id %}">{{ ticket.name }}</a></td>
                             <td><span class="badge badge-{{ ticket.status }}">{{ ticket.get_status_display }}</span></td>
                             <td>{{ ticket.get_priority_display }}</td>

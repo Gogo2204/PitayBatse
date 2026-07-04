@@ -69,6 +69,10 @@ class Ticket(models.Model):
     def __str__(self):
         return f"{self.name} ({self.public_id})"
 
+    @property
+    def short_code(self):
+        return self.public_id.hex[:8].upper()
+
 
 class Message(models.Model):
     ticket = models.ForeignKey(

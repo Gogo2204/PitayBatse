@@ -4,10 +4,10 @@
 
 {% block content %}
 <section class="ticket-detail">
-    <h1>{{ ticket.name }}</h1>
+    <h1>{{ ticket.name }} <span class="ticket-code">#{{ ticket.short_code }}</span></h1>
 
     <dl class="ticket-meta">
-        <dt>Номер</dt><dd>{{ ticket.public_id }}</dd>
+        <dt>Номер</dt><dd>#{{ ticket.short_code }}</dd>
         <dt>Статус</dt><dd><span class="badge badge-{{ ticket.status }}">{{ ticket.get_status_display }}</span></dd>
         <dt>Приоритет</dt><dd>{{ ticket.get_priority_display }}</dd>
         <dt>Краен срок</dt><dd>{% if ticket.deadline %}{{ ticket.deadline|date:"d.m.Y H:i" }}{% else %}—{% endif %}</dd>

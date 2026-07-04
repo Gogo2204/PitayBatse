@@ -291,6 +291,14 @@ h2 {
     color: var(--color-muted);
 }
 
+.ticket-code {
+    font-family: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+    color: var(--color-muted);
+    font-size: 0.9em;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
 /* Forms */
 input[type="text"],
 input[type="email"],
