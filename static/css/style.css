@@ -260,3 +260,28 @@ button[type="submit"]:hover {
 .payment-details span {
     color: var(--color-muted);
 }
+
+/* Ticket form */
+.ticket-form {
+    max-width: 34rem;
+}
+
+.notices {
+    margin-bottom: var(--space);
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    background: rgba(43, 108, 176, 0.06);
+}
+
+.notices p {
+    margin: 0.2rem 0;
+}
+
+.ticket-form textarea {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 4px;
+    font: inherit;
+}
