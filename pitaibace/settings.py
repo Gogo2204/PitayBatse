@@ -111,4 +111,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 DEFAULT_FROM_EMAIL = 'noreply@pitaibace.local'
 
+# Hours an expert may be inactive on a ticket before it is auto-reopened.
+TICKET_INACTIVITY_HOURS = 48
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

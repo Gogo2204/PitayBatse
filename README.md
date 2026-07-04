@@ -28,3 +28,27 @@ python manage.py createsuperuser
 ```bash
 python manage.py runserver
 ```
+
+## Автоматично връщане на неактивни тикети
+
+Командата `check_inactive_tickets` намира тикетите в статус „Чакаме та“
+(`waiting_reply`) или „Експерто бачка“ (`in_progress`), по които няма
+активност от повече от `TICKET_INACTIVITY_HOURS` часа (по подразбиране 48),
+и ги връща към статус „отворен“. Клиентът получава имейл, а промяната се
+записва в лога като системно действие.
+
+```bash
+python manage.py check_inactive_tickets
+```
+
+Интервалът се настройва чрез `TICKET_INACTIVITY_HOURS` в настройките.
+
+### Стартиране през cron
+
+За да се изпълнява всеки час, добавете ред в crontab (`crontab -e`), като
+използвате абсолютните пътища до виртуалната среда и проекта:
+
+```cron
+0 * * * * cd /path/to/pitaibace && /path/to/pitaibace/venv/bin/python manage.py check_inactive_tickets >> /var/log/pitaibace/inactive_tickets.log 2>&1
+```
+

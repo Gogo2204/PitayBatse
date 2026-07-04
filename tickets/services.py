@@ -18,11 +18,13 @@ ALLOWED_TRANSITIONS = {
         Status.RESOLVED,
     },
     Status.IN_PROGRESS: {
+        Status.OPEN,
         Status.WAITING_REPLY,
         Status.CLIENT_REPLIED,
         Status.RESOLVED,
     },
     Status.WAITING_REPLY: {
+        Status.OPEN,
         Status.IN_PROGRESS,
         Status.CLIENT_REPLIED,
         Status.RESOLVED,
