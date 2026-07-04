@@ -1,14 +1,16 @@
 from django.contrib.auth import get_user_model
 from django.core.paginator import Paginator
 from django.db.models import Case, F, IntegerField, Value, When
-from django.shortcuts import render
+from django.http import HttpResponseBadRequest
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import require_POST
 
 from departments.models import Department
 from logs.models import ActivityLog
 from orders.models import Order
 from tickets.models import Ticket
 
-from .decorators import expert_required
+from .decorators import expert_required, superuser_required
 
 User = get_user_model()
 
@@ -64,7 +66,54 @@ def tickets(request):
 @expert_required
 def users(request):
     people = User.objects.select_related("department").order_by("username")
-    return render(request, "staff/users.html", {"people": people})
+    context = {"people": people, "departments": Department.objects.all()}
+    return render(request, "staff/users.html", context)
+
+
+@superuser_required
+@require_POST
+def promote_user(request, user_id):
+    target = get_object_or_404(User, pk=user_id)
+    department_id = request.POST.get("department")
+    if not department_id:
+        return HttpResponseBadRequest("Изберете отдел.")
+    department = get_object_or_404(Department, pk=department_id)
+
+    target.role = User.Role.EXPERT
+    target.department = department
+    target.save(update_fields=["role", "department"])
+
+    ActivityLog.objects.create(
+        actor=request.user,
+        action="user_promoted",
+        description=(
+            f"Потребител „{target.username}“ стана експерт в отдел „{department.name}“."
+        ),
+    )
+    return redirect("staff:users")
+
+
+@superuser_required
+@require_POST
+def set_department(request, user_id):
+    target = get_object_or_404(User, pk=user_id)
+    if target.role != User.Role.EXPERT:
+        return HttpResponseBadRequest("Само експерт може да сменя отдел.")
+
+    department_id = request.POST.get("department")
+    if not department_id:
+        return HttpResponseBadRequest("Изберете отдел.")
+    department = get_object_or_404(Department, pk=department_id)
+
+    target.department = department
+    target.save(update_fields=["department"])
+
+    ActivityLog.objects.create(
+        actor=request.user,
+        action="department_changed",
+        description=f"Отделът на „{target.username}“ е сменен на „{department.name}“.",
+    )
+    return redirect("staff:users")
 
 
 @expert_required

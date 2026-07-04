@@ -15,3 +15,14 @@ def expert_required(view):
         return view(request, *args, **kwargs)
 
     return wrapper
+
+
+def superuser_required(view):
+    @wraps(view)
+    @login_required
+    def wrapper(request, *args, **kwargs):
+        if not request.user.is_superuser:
+            raise PermissionDenied
+        return view(request, *args, **kwargs)
+
+    return wrapper

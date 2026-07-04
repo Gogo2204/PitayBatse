@@ -13,6 +13,7 @@
                 <th>Имейл</th>
                 <th>Роля</th>
                 <th>Отдел</th>
+                {% if request.user.is_superuser %}<th>Действия</th>{% endif %}
             </tr>
         </thead>
         <tbody>
@@ -22,6 +23,40 @@
                     <td>{{ person.email|default:"—" }}</td>
                     <td>{{ person.get_role_display }}{% if person.is_superuser %} (админ){% endif %}</td>
                     <td>{% if person.department %}{{ person.department.name }}{% else %}—{% endif %}</td>
+                    {% if request.user.is_superuser %}
+                        <td>
+                            {% if person.is_superuser %}
+                                —
+                            {% elif person.role == 'expert' %}
+                                <details>
+                                    <summary>Смени отдела</summary>
+                                    <form method="post" action="{% url 'staff:set_department' person.id %}" class="control-form">
+                                        {% csrf_token %}
+                                        <select name="department" required>
+                                            {% for department in departments %}
+                                                <option value="{{ department.pk }}" {% if department.pk == person.department_id %}selected{% endif %}>{{ department.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <button type="submit">Потвърди</button>
+                                    </form>
+                                </details>
+                            {% else %}
+                                <details>
+                                    <summary>Направи пустиняк</summary>
+                                    <form method="post" action="{% url 'staff:promote_user' person.id %}" class="control-form">
+                                        {% csrf_token %}
+                                        <select name="department" required>
+                                            <option value="">— Изберете отдел —</option>
+                                            {% for department in departments %}
+                                                <option value="{{ department.pk }}">{{ department.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                        <button type="submit">Потвърди</button>
+                                    </form>
+                                </details>
+                            {% endif %}
+                        </td>
+                    {% endif %}
                 </tr>
             {% endfor %}
         </tbody>

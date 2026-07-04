@@ -3,6 +3,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from departments.models import Department
+from logs.models import ActivityLog
 from orders.models import Order
 from services.models import Service
 from tickets.models import Ticket
@@ -116,3 +117,73 @@ class TicketScopeTests(StaffBase):
             reverse("staff:tickets"), {"status": Ticket.Status.OPEN}
         )
         self.assertNotContains(response, "Тикет в Х")
+
+
+class UserManagementTests(StaffBase):
+    def _promote_url(self, user):
+        return reverse("staff:promote_user", args=[user.id])
+
+    def _department_url(self, user):
+        return reverse("staff:set_department", args=[user.id])
+
+    def test_only_superuser_sees_promote_button(self):
+        self.client.force_login(self.expert_x)
+        expert_response = self.client.get(reverse("staff:users"))
+        self.assertNotContains(expert_response, "Направи пустиняк")
+
+        self.client.force_login(self.superuser)
+        super_response = self.client.get(reverse("staff:users"))
+        self.assertContains(super_response, "Направи пустиняк")
+
+    def test_expert_gets_403_on_promote_endpoint(self):
+        self.client.force_login(self.expert_x)
+        response = self.client.post(
+            self._promote_url(self.client_user), {"department": self.dept_x.pk}
+        )
+        self.assertEqual(response.status_code, 403)
+        self.client_user.refresh_from_db()
+        self.assertEqual(self.client_user.role, User.Role.CLIENT)
+
+    def test_expert_gets_403_on_set_department_endpoint(self):
+        self.client.force_login(self.expert_x)
+        response = self.client.post(
+            self._department_url(self.expert_x), {"department": self.dept_y.pk}
+        )
+        self.assertEqual(response.status_code, 403)
+
+    def test_promotion_requires_department(self):
+        self.client.force_login(self.superuser)
+        response = self.client.post(self._promote_url(self.client_user), {})
+        self.assertEqual(response.status_code, 400)
+        self.client_user.refresh_from_db()
+        self.assertEqual(self.client_user.role, User.Role.CLIENT)
+        self.assertIsNone(self.client_user.department)
+
+    def test_superuser_promotes_client_and_logs(self):
+        self.client.force_login(self.superuser)
+        response = self.client.post(
+            self._promote_url(self.client_user), {"department": self.dept_x.pk}
+        )
+        self.assertRedirects(response, reverse("staff:users"))
+        self.client_user.refresh_from_db()
+        self.assertEqual(self.client_user.role, User.Role.EXPERT)
+        self.assertEqual(self.client_user.department, self.dept_x)
+        self.assertTrue(
+            ActivityLog.objects.filter(
+                actor=self.superuser, action="user_promoted"
+            ).exists()
+        )
+
+    def test_superuser_changes_expert_department_and_logs(self):
+        self.client.force_login(self.superuser)
+        response = self.client.post(
+            self._department_url(self.expert_x), {"department": self.dept_y.pk}
+        )
+        self.assertRedirects(response, reverse("staff:users"))
+        self.expert_x.refresh_from_db()
+        self.assertEqual(self.expert_x.department, self.dept_y)
+        self.assertTrue(
+            ActivityLog.objects.filter(
+                actor=self.superuser, action="department_changed"
+            ).exists()
+        )
