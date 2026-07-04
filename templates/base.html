@@ -13,9 +13,9 @@
         <nav class="site-nav">
             <ul>
                 <li><a href="/">Начало</a></li>
-                <li><a href="/services/">Услуги</a></li>
+                <li><a href="{% url 'services:list' %}">Услуги</a></li>
                 <li><a href="/orders/">Поръчки</a></li>
-                <li><a href="/tickets/">Тикети</a></li>
+                <li><a href="{% url 'tickets:index' %}">Тикети</a></li>
                 {% if user.is_authenticated %}
                     <li><a href="{% url 'accounts:dashboard' %}">Табло</a></li>
                     <li>

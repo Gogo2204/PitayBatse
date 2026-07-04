@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
+from django.db.models import Q
 from django.http import Http404
 from django.shortcuts import get_object_or_404, redirect, render
 
@@ -28,14 +29,25 @@ def build_form_notices(order):
     return notices
 
 
+def visible_tickets(user):
+    if user.is_superuser:
+        return Ticket.objects.all()
+    criteria = Q(client_id=user.id)
+    if is_expert(user) and user.department_id is not None:
+        criteria |= Q(department_id=user.department_id)
+    return Ticket.objects.filter(criteria)
+
+
 def _can_access(user, ticket):
-    if ticket.client_id == user.id:
-        return True
-    if is_expert(user):
-        if user.is_superuser:
-            return True
-        return user.department_id is not None and ticket.department_id == user.department_id
-    return False
+    return visible_tickets(user).filter(pk=ticket.pk).exists()
+
+
+@login_required
+def index(request):
+    tickets = visible_tickets(request.user).select_related(
+        "order__service", "department"
+    )
+    return render(request, "tickets/ticket_list.html", {"tickets": tickets})
 
 
 @login_required

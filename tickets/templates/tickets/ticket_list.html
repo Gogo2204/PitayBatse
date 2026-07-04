@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}Тикети — ПитайБаце{% endblock %}
+
+{% block content %}
+<section class="ticket-list">
+    <h1>Тикети</h1>
+
+    {% if tickets %}
+        <div class="table-wrap">
+            <table class="ticket-table">
+                <thead>
+                    <tr>
+                        <th>Заглавие</th>
+                        <th>Услуга</th>
+                        <th>Статус</th>
+                        <th>Създаден</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ticket in tickets %}
+                        <tr>
+                            <td><a href="{% url 'tickets:detail' ticket.public_id %}">{{ ticket.name }}</a></td>
+                            <td>{{ ticket.order.service.name }}</td>
+                            <td>{{ ticket.get_status_display }}</td>
+                            <td>{{ ticket.created_at|date:"d.m.Y" }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="empty-state">
+            Все още няма тикети.
+            <a href="{% url 'services:list' %}">Разгледайте услугите</a>, за да започнете.
+        </p>
+    {% endif %}
+</section>
+{% endblock %}
