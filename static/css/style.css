@@ -420,3 +420,31 @@ button[type="submit"]:hover {
     color: #fff;
     text-decoration: none;
 }
+
+/* Expert dashboard */
+.staff-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space);
+    margin-bottom: var(--space);
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.sort-bar {
+    color: var(--color-muted);
+    font-size: 0.9rem;
+}
+
+.ticket-table tr.unassigned {
+    background: rgba(43, 108, 176, 0.08);
+    font-weight: 600;
+}
+
+.pagination {
+    display: flex;
+    gap: var(--space);
+    align-items: center;
+    margin-top: var(--space);
+    color: var(--color-muted);
+}

@@ -1,0 +1,30 @@
+{% extends "staff/base_staff.html" %}
+
+{% block title %}Потребители — Експертен панел{% endblock %}
+
+{% block staff_content %}
+<h2>Потребители</h2>
+
+<div class="table-wrap">
+    <table class="ticket-table">
+        <thead>
+            <tr>
+                <th>Потребител</th>
+                <th>Имейл</th>
+                <th>Роля</th>
+                <th>Отдел</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for person in people %}
+                <tr>
+                    <td>{{ person.username }}</td>
+                    <td>{{ person.email|default:"—" }}</td>
+                    <td>{{ person.get_role_display }}{% if person.is_superuser %} (админ){% endif %}</td>
+                    <td>{% if person.department %}{{ person.department.name }}{% else %}—{% endif %}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

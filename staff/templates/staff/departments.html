@@ -1,0 +1,28 @@
+{% extends "staff/base_staff.html" %}
+
+{% block title %}Департаменти — Експертен панел{% endblock %}
+
+{% block staff_content %}
+<h2>Департаменти</h2>
+
+<div class="table-wrap">
+    <table class="ticket-table">
+        <thead>
+            <tr>
+                <th>Име</th>
+                <th>Идентификатор</th>
+                <th>Описание</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for department in departments %}
+                <tr>
+                    <td>{{ department.name }}</td>
+                    <td>{{ department.slug }}</td>
+                    <td>{{ department.description|default:"—" }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

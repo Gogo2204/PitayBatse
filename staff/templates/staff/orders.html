@@ -1,0 +1,34 @@
+{% extends "staff/base_staff.html" %}
+
+{% block title %}Поръчки — Експертен панел{% endblock %}
+
+{% block staff_content %}
+<h2>Поръчки</h2>
+
+<div class="table-wrap">
+    <table class="ticket-table">
+        <thead>
+            <tr>
+                <th>№</th>
+                <th>Клиент</th>
+                <th>Услуга</th>
+                <th>Сума</th>
+                <th>Плащане</th>
+                <th>Дата</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+                <tr>
+                    <td>{{ order.id }}</td>
+                    <td>{{ order.user.username }}</td>
+                    <td>{{ order.service.name }}</td>
+                    <td>{{ order.amount }} €</td>
+                    <td>{{ order.get_status_display }}</td>
+                    <td>{{ order.created_at|date:"d.m.Y" }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'orders',
     'tickets',
     'logs',
+    'staff',
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="staff">
+    <h1>Експертен панел</h1>
+
+    <nav class="staff-nav">
+        <a href="{% url 'staff:tickets' %}">Тикети</a>
+        <a href="{% url 'staff:users' %}">Потребители</a>
+        <a href="{% url 'staff:orders' %}">Поръчки</a>
+        <a href="{% url 'staff:departments' %}">Департаменти</a>
+        <a href="{% url 'staff:logs' %}">Лог</a>
+    </nav>
+
+    {% block staff_content %}{% endblock %}
+</section>
+{% endblock %}

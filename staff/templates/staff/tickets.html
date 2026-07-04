@@ -1,0 +1,51 @@
+{% extends "staff/base_staff.html" %}
+
+{% block title %}Тикети — Експертен панел{% endblock %}
+
+{% block staff_content %}
+<h2>Тикети</h2>
+
+<nav class="filter-bar">
+    <a href="?sort={{ current_sort }}" class="{% if not current_status %}active{% endif %}">Всички</a>
+    {% for value, label in statuses %}
+        <a href="?status={{ value }}&sort={{ current_sort }}" class="{% if current_status == value %}active{% endif %}">{{ label }}</a>
+    {% endfor %}
+</nav>
+
+<p class="sort-bar">
+    Подреди по:
+    <a href="?status={{ current_status }}&sort=activity" class="{% if current_sort == 'activity' %}active{% endif %}">последна активност</a>
+    <a href="?status={{ current_status }}&sort=priority" class="{% if current_sort == 'priority' %}active{% endif %}">приоритет</a>
+</p>
+
+{% if tickets %}
+    <div class="table-wrap">
+        <table class="ticket-table">
+            <thead>
+                <tr>
+                    <th>Заглавие</th>
+                    <th>Статус</th>
+                    <th>Приоритет</th>
+                    <th>Отдел</th>
+                    <th>Експерт</th>
+                    <th>Последна активност</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ticket in tickets %}
+                    <tr class="{% if ticket.status == 'open' and not ticket.main_expert_id %}unassigned{% endif %}">
+                        <td><a href="{% url 'tickets:detail' ticket.public_id %}">{{ ticket.name }}</a></td>
+                        <td>{{ ticket.get_status_display }}</td>
+                        <td>{{ ticket.get_priority_display }}</td>
+                        <td>{{ ticket.department.name }}</td>
+                        <td>{% if ticket.main_expert %}{{ ticket.main_expert.username }}{% else %}—{% endif %}</td>
+                        <td>{% if ticket.last_message_at %}преди {{ ticket.last_message_at|timesince }}{% else %}—{% endif %}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% else %}
+    <p class="empty-state">Няма тикети за показване.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,46 @@
+{% extends "staff/base_staff.html" %}
+
+{% block title %}Лог — Експертен панел{% endblock %}
+
+{% block staff_content %}
+<h2>Лог</h2>
+
+{% if page_obj.object_list %}
+    <div class="table-wrap">
+        <table class="ticket-table">
+            <thead>
+                <tr>
+                    <th>Дата</th>
+                    <th>Действие</th>
+                    <th>Кой</th>
+                    <th>Тикет</th>
+                    <th>Описание</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in page_obj %}
+                    <tr>
+                        <td>{{ entry.created_at|date:"d.m.Y H:i" }}</td>
+                        <td>{{ entry.action }}</td>
+                        <td>{% if entry.actor %}{{ entry.actor.username }}{% else %}—{% endif %}</td>
+                        <td>{% if entry.ticket %}{{ entry.ticket.name }}{% else %}—{% endif %}</td>
+                        <td>{{ entry.description }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <nav class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">← Предишна</a>
+        {% endif %}
+        <span>Страница {{ page_obj.number }} от {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Следваща →</a>
+        {% endif %}
+    </nav>
+{% else %}
+    <p class="empty-state">Няма записи в лога.</p>
+{% endif %}
+{% endblock %}
