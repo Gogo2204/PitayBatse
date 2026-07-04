@@ -31,7 +31,4 @@ class User(AbstractUser):
 
     @property
     def initials(self):
-        parts = [part for part in (self.first_name, self.last_name) if part.strip()]
-        if parts:
-            return "".join(part.strip()[0] for part in parts).upper()
         return self.username[:2].upper()

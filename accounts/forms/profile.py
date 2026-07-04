@@ -8,10 +8,9 @@ MAX_AVATAR_SIZE = 2 * 1024 * 1024
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ["first_name", "last_name", "email", "avatar"]
+        fields = ["username", "email", "avatar"]
         labels = {
-            "first_name": "Име",
-            "last_name": "Фамилия",
+            "username": "Потребителско име",
             "email": "Имейл",
             "avatar": "Профилна снимка",
         }
