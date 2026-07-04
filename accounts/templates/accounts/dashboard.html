@@ -5,6 +5,77 @@
 {% block content %}
 <section class="dashboard">
     <h1>Здравейте, {{ user.username }}!</h1>
-    <p>Това е вашето клиентско табло. Скоро тук ще виждате своите поръчки и тикети.</p>
+
+    <h2>Моите тикети</h2>
+
+    <nav class="filter-bar">
+        <a href="{% url 'accounts:dashboard' %}" class="{% if not current_status %}active{% endif %}">Всички</a>
+        {% for value, label in statuses %}
+            <a href="?status={{ value }}" class="{% if current_status == value %}active{% endif %}">{{ label }}</a>
+        {% endfor %}
+    </nav>
+
+    {% if tickets %}
+        <div class="table-wrap">
+            <table class="ticket-table">
+                <thead>
+                    <tr>
+                        <th>Заглавие</th>
+                        <th>Статус</th>
+                        <th>Приоритет</th>
+                        <th>Отдел</th>
+                        <th>Последно съобщение</th>
+                        <th>Краен срок</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ticket in tickets %}
+                        <tr>
+                            <td><a href="{% url 'tickets:detail' ticket.public_id %}">{{ ticket.name }}</a></td>
+                            <td>{{ ticket.get_status_display }}</td>
+                            <td>{{ ticket.get_priority_display }}</td>
+                            <td>{{ ticket.department.name }}</td>
+                            <td>{% if ticket.last_message_at %}преди {{ ticket.last_message_at|timesince }}{% else %}—{% endif %}</td>
+                            <td>{% if ticket.deadline %}{{ ticket.deadline|date:"d.m.Y H:i" }}{% else %}—{% endif %}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="empty-state">
+            Няма тикети за показване.
+            <a href="{% url 'services:list' %}">Разгледайте услугите</a>, за да започнете.
+        </p>
+    {% endif %}
+
+    <h2>Моите поръчки</h2>
+
+    {% if orders %}
+        <div class="table-wrap">
+            <table class="ticket-table">
+                <thead>
+                    <tr>
+                        <th>Услуга</th>
+                        <th>Сума</th>
+                        <th>Плащане</th>
+                        <th>Дата</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                        <tr>
+                            <td>{{ order.service.name }}</td>
+                            <td>{{ order.amount }} €</td>
+                            <td>{{ order.get_status_display }}</td>
+                            <td>{{ order.created_at|date:"d.m.Y" }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p class="empty-state">Няма поръчки за показване.</p>
+    {% endif %}
 </section>
 {% endblock %}
