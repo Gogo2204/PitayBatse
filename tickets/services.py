@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
+from django.template.loader import render_to_string
 
 from logs.models import ActivityLog
 
@@ -74,21 +75,22 @@ def _log(ticket, actor, action, description):
     )
 
 
-def _notify_client(ticket, new_status, reason):
+def _notify_client(ticket, old_status, new_status, reason):
     email = (ticket.client.email or "").strip()
     if not email:
         return
-    label = Status(new_status).label
-    lines = [
-        "Здравейте,",
-        "",
-        f"Статусът на вашия тикет „{ticket.name}“ вече е: {label}.",
-    ]
-    if reason:
-        lines.append(f"Причина: {reason}")
+    body = render_to_string(
+        "tickets/emails/status_change.txt",
+        {
+            "ticket_name": ticket.name,
+            "old_status": Status(old_status).label,
+            "new_status": Status(new_status).label,
+            "reason": reason,
+        },
+    )
     send_mail(
         f"Тикет „{ticket.name}“ — промяна на статуса",
-        "\n".join(lines),
+        body,
         settings.DEFAULT_FROM_EMAIL,
         [email],
     )
@@ -114,7 +116,7 @@ def change_status(ticket, new_status, actor=None, reason=""):
     if reason:
         description = f"{description} {reason}"
     _log(ticket, actor, "status_change", description)
-    _notify_client(ticket, new_status, reason)
+    _notify_client(ticket, old_status, new_status, reason)
     return ticket
 
 

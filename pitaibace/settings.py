@@ -107,9 +107,18 @@ MEDIA_URL = 'media/'
 
 MEDIA_ROOT = BASE_DIR / 'media'
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+if DEBUG:
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+else:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-DEFAULT_FROM_EMAIL = 'noreply@pitaibace.local'
+EMAIL_HOST = os.environ.get('EMAIL_HOST', 'localhost')
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT', '25'))
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'False').lower() in ('1', 'true', 'yes', 'on')
+
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'noreply@pitaibace.local')
 
 # Hours an expert may be inactive on a ticket before it is auto-reopened.
 TICKET_INACTIVITY_HOURS = 48
