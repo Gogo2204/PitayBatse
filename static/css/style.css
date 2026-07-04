@@ -52,11 +52,8 @@ h2 {
 .site-header,
 .site-main,
 .site-footer {
-    max-width: var(--max-width);
-    margin: 0 auto;
-    background: var(--color-bg);
-    border-left: 1px solid var(--color-border);
-    border-right: 1px solid var(--color-border);
+    padding-left: 2rem;
+    padding-right: 2rem;
 }
 
 .site-header {
@@ -65,9 +62,9 @@ h2 {
     justify-content: space-between;
     flex-wrap: wrap;
     gap: var(--space);
-    padding: 0.75rem var(--space);
-    margin-top: var(--space);
-    border-top: 1px solid var(--color-border);
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    background: var(--color-bg);
     border-bottom: 1px solid var(--color-border-strong);
 }
 
@@ -89,15 +86,15 @@ h2 {
 }
 
 .site-main {
-    padding: calc(var(--space) * 1.5) var(--space);
+    padding-top: calc(var(--space) * 1.5);
+    padding-bottom: calc(var(--space) * 1.5);
     min-height: 60vh;
 }
 
 .site-footer {
-    padding: var(--space);
-    margin-bottom: var(--space);
+    padding-top: var(--space);
+    padding-bottom: var(--space);
     border-top: 1px solid var(--color-border-strong);
-    border-bottom: 1px solid var(--color-border);
     color: var(--color-muted);
     font-size: 0.9rem;
 }
@@ -618,6 +615,13 @@ button[type="submit"]:hover {
 @media (max-width: 640px) {
     :root {
         --space: 0.85rem;
+    }
+
+    .site-header,
+    .site-main,
+    .site-footer {
+        padding-left: 1rem;
+        padding-right: 1rem;
     }
 
     .site-header {
