@@ -163,10 +163,10 @@ class ExpertActionTests(TicketDetailBase):
     def test_expert_change_priority(self):
         self.client.force_login(self.expert)
         self.client.post(
-            self._url(), {"action": "priority", "priority": Ticket.Priority.URGENT}
+            self._url(), {"action": "priority", "priority": Ticket.Priority.HIGH}
         )
         self.ticket.refresh_from_db()
-        self.assertEqual(self.ticket.priority, Ticket.Priority.URGENT)
+        self.assertEqual(self.ticket.priority, Ticket.Priority.HIGH)
 
     def test_client_cannot_use_expert_actions(self):
         self.client.force_login(self.client_user)

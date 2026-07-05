@@ -15,10 +15,9 @@ class Ticket(models.Model):
         RESOLVED = "resolved", "Оправено е, баце"
 
     class Priority(models.TextChoices):
-        LOW = "low", "Нисък"
-        NORMAL = "normal", "Нормален"
-        HIGH = "high", "Висок"
-        URGENT = "urgent", "Спешен"
+        LOW = "low", "Мани, че почека"
+        NORMAL = "normal", "Кога можеш, бате"
+        HIGH = "high", "Тичай, че гори!"
 
     public_id = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=200)
