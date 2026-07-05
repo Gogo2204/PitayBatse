@@ -37,12 +37,6 @@ def _department_tickets(user):
 def tickets(request):
     queryset = _department_tickets(request.user).annotate(priority_rank=PRIORITY_RANK)
 
-    status = request.GET.get("status")
-    if status in Ticket.Status.values:
-        queryset = queryset.filter(status=status)
-    else:
-        status = ""
-
     sort = request.GET.get("sort")
     if sort == "priority":
         queryset = queryset.order_by(
@@ -56,8 +50,6 @@ def tickets(request):
 
     context = {
         "tickets": queryset,
-        "statuses": Ticket.Status.choices,
-        "current_status": status,
         "current_sort": sort,
     }
     return render(request, "staff/tickets.html", context)

@@ -109,15 +109,6 @@ class TicketScopeTests(StaffBase):
         response = self.client.get(reverse("staff:tickets"))
         self.assertContains(response, "unassigned")
 
-    def test_status_filter(self):
-        self.ticket_x.status = Ticket.Status.RESOLVED
-        self.ticket_x.save(update_fields=["status"])
-        self.client.force_login(self.expert_x)
-        response = self.client.get(
-            reverse("staff:tickets"), {"status": Ticket.Status.OPEN}
-        )
-        self.assertNotContains(response, "Тикет в Х")
-
 
 class UserManagementTests(StaffBase):
     def _promote_url(self, user):

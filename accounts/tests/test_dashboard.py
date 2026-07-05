@@ -82,7 +82,7 @@ class DashboardTests(TestCase):
         self.assertContains(response, "Услуга табло")
         self.assertNotContains(response, "Само за Б")
 
-    def test_status_filter_limits_tickets(self):
+    def test_all_tickets_shown_without_filtering(self):
         self._ticket(
             self.client_a,
             self._order(self.client_a),
@@ -90,16 +90,6 @@ class DashboardTests(TestCase):
             status=Ticket.Status.RESOLVED,
         )
         self.client.force_login(self.client_a)
-
-        response = self.client.get(
-            reverse("accounts:dashboard"), {"status": Ticket.Status.RESOLVED}
-        )
+        response = self.client.get(reverse("accounts:dashboard"))
         self.assertContains(response, "Приключен на А")
-        self.assertNotContains(response, "Тикет на А")
-
-    def test_invalid_status_filter_is_ignored(self):
-        self.client.force_login(self.client_a)
-        response = self.client.get(
-            reverse("accounts:dashboard"), {"status": "teleport"}
-        )
         self.assertContains(response, "Тикет на А")
