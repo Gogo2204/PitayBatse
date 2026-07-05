@@ -61,7 +61,7 @@ class TicketCreateForm(forms.Form):
         input_formats=["%Y-%m-%dT%H:%M"],
     )
     attachments = MultipleFileField(
-        required=False, label="Файлове (по избор)", validators=[validate_upload]
+        required=False, label="Прикачи файл", validators=[validate_upload]
     )
 
     site_admin_url = forms.URLField(required=False, label="URL за админ панел")
@@ -89,9 +89,9 @@ class ReplyForm(forms.Form):
         widget=forms.Textarea(attrs={"rows": 4}),
     )
     attachments = MultipleFileField(
-        required=False, label="Файлове (по избор)", validators=[validate_upload]
+        required=False, label="Прикачи файл", validators=[validate_upload]
     )
 
 
 class ExpertReplyForm(ReplyForm):
-    is_internal = forms.BooleanField(required=False, label="Вътрешна бележка")
+    is_internal = forms.BooleanField(required=False, label="Бележка")

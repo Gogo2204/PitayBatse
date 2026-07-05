@@ -212,6 +212,13 @@ h2 {
     font-weight: 600;
 }
 
+.inline-check {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--color-muted);
+}
+
 .flash {
     margin-bottom: var(--space);
 }
@@ -694,13 +701,15 @@ button[type="submit"]:hover {
 
 .ticket-meta {
     display: grid;
-    grid-template-columns: max-content 1fr;
-    gap: 0.25rem 1rem;
+    grid-template-columns: minmax(0, 40%) 1fr;
+    gap: 0.3rem 0.75rem;
     margin: 0;
 }
 
 .ticket-meta dt {
     color: var(--color-muted);
+    font-size: 0.9rem;
+    overflow-wrap: anywhere;
 }
 
 .ticket-meta dd {

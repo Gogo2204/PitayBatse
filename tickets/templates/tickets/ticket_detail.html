@@ -13,7 +13,7 @@
     <div class="ticket-layout{% if not expert_view %} ticket-layout--two{% endif %}">
 
         <div class="card ticket-details">
-            <div class="card-header"><h2>Детайли</h2></div>
+            <div class="card-header"><h2>Информация</h2></div>
             <div class="card-body">
                 <dl class="ticket-meta">
                     <dt>Номер</dt><dd>#{{ ticket.short_code }}</dd>
@@ -67,8 +67,12 @@
                         <input type="hidden" name="action" value="reply">
                         {% for field in reply_form %}
                             <div class="form-row">
-                                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                {{ field }}
+                                {% if field.field.widget.input_type == "checkbox" %}
+                                    <label class="inline-check">{{ field }} {{ field.label }}</label>
+                                {% else %}
+                                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                    {{ field }}
+                                {% endif %}
                                 {% for err in field.errors %}<p class="field-error">{{ err }}</p>{% endfor %}
                             </div>
                         {% endfor %}
@@ -87,7 +91,7 @@
                     <form method="post" class="control-form">
                         {% csrf_token %}
                         <input type="hidden" name="action" value="assign">
-                        <button type="submit">Поеми тикета</button>
+                        <button type="submit">Поеми го</button>
                     </form>
 
                     <form method="post" class="control-form">
