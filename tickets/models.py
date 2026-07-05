@@ -21,6 +21,12 @@ class Ticket(models.Model):
 
     public_id = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=200)
+    site_url = models.URLField(
+        blank=True,
+        default="",
+        verbose_name="Сайт",
+        help_text="Адресът на сайта, за който е тикетът",
+    )
     order = models.ForeignKey(
         "orders.Order",
         on_delete=models.CASCADE,

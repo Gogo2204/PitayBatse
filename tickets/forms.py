@@ -48,6 +48,10 @@ class MultipleFileField(forms.FileField):
 
 class TicketCreateForm(forms.Form):
     name = forms.CharField(max_length=200, label="Заглавие на тикета")
+    site_url = forms.URLField(
+        label="Сайт",
+        help_text="Адресът на сайта, за който е тикетът",
+    )
     description = forms.CharField(
         label="Описание на проблема",
         widget=forms.Textarea(attrs={"rows": 6}),

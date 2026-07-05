@@ -44,6 +44,7 @@ class TicketCreateViewTests(TestCase):
     def _valid_payload(self, **overrides):
         payload = {
             "name": "Сайто ми е счупен",
+            "site_url": "https://mysite.example.com",
             "description": "Нищо не работи, баце, оправи го.",
             "site_admin_url": "https://example.com/wp-admin",
             "site_username": "admin",
@@ -105,6 +106,7 @@ class TicketCreateViewTests(TestCase):
         )
 
         self.assertEqual(ticket.status, Ticket.Status.OPEN)
+        self.assertEqual(ticket.site_url, "https://mysite.example.com")
         self.assertEqual(ticket.department, self.department)
         self.assertEqual(ticket.client, self.user)
         self.assertIsNotNone(ticket.last_message_at)
@@ -137,6 +139,17 @@ class TicketCreateViewTests(TestCase):
             self._valid_payload(name="Втори опит"),
         )
         self.assertEqual(Ticket.objects.filter(order=order).count(), 1)
+
+    def test_site_url_is_required(self):
+        self.client.force_login(self.user)
+        order = self._order(self.one_time_service)
+        response = self.client.post(
+            reverse("tickets:create", args=[order.pk]),
+            self._valid_payload(site_url=""),
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("site_url", response.context["form"].errors)
+        self.assertFalse(Ticket.objects.filter(order=order).exists())
 
     def test_subscription_order_allows_multiple_tickets(self):
         self.client.force_login(self.user)

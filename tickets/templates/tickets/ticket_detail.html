@@ -22,6 +22,7 @@
                     <dt>Води го</dt><dd>{% if ticket.main_expert %}{{ ticket.main_expert.username }}{% else %}—{% endif %}</dd>
                     <dt>Отдел</dt><dd>{% if ticket.department %}{{ ticket.department.name }}{% else %}—{% endif %}</dd>
                     <dt>Услуга</dt><dd>{% if ticket.order.service %}{{ ticket.order.service.name }}{% else %}—{% endif %}</dd>
+                    <dt>Сайт</dt><dd>{% if ticket.site_url %}<a href="{{ ticket.site_url }}">{{ ticket.site_url }}</a>{% else %}—{% endif %}</dd>
                     <dt>Краен срок</dt><dd>{% if ticket.deadline %}{{ ticket.deadline|date:"d.m.Y H:i" }}{% else %}—{% endif %}</dd>
                     <dt>Създаден</dt><dd>{{ ticket.created_at|date:"d.m.Y H:i" }}</dd>
                     <dt>Последно съобщение</dt>

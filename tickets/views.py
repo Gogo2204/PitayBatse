@@ -71,6 +71,7 @@ def create(request, order_id):
             with transaction.atomic():
                 ticket = Ticket.objects.create(
                     name=data["name"],
+                    site_url=data["site_url"],
                     order=order,
                     client=request.user,
                     department=order.service.department,
