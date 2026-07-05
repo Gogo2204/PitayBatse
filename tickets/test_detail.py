@@ -192,7 +192,7 @@ class CredentialRevealTests(TicketDetailBase):
         self.client.force_login(self.expert)
         response = self.client.get(self._url())
         self.assertNotContains(response, "s1te-secret-parola")
-        self.assertContains(response, "Покажи достъпите")
+        self.assertContains(response, "Виж тайните")
 
     def test_assigned_expert_can_reveal_and_it_is_logged(self):
         self.client.force_login(self.expert)

@@ -146,7 +146,7 @@
                     </ul>
 
                     {% if is_assigned_expert and credential %}
-                        <h3>Достъпи</h3>
+                        <h3>Тайни за сайто</h3>
                         {% if reveal_credentials %}
                             <dl class="credential-list">
                                 <dt>URL за админ панел</dt><dd>{{ credential.site_admin_url|default:"—" }}</dd>
@@ -155,13 +155,13 @@
                                 <dt>Потребител за хостинг</dt><dd>{{ credential.hosting_username|default:"—" }}</dd>
                                 <dt>Парола за хостинг</dt><dd>{{ credential.hosting_password|default:"—" }}</dd>
                             </dl>
-                            <p class="help-text">Разкриването на достъпите е записано в лога.</p>
+                            <p class="help-text">Разкриването на тайните е записано в лога.</p>
                         {% else %}
-                            <p class="help-text">Достъпите са скрити. Разкриването се записва в лога.</p>
+                            <p class="help-text">Тайните са скрити. Разкриването се записва в лога.</p>
                             <form method="post" class="reveal-form">
                                 {% csrf_token %}
                                 <input type="hidden" name="action" value="reveal_credentials">
-                                <button type="submit">Покажи достъпите</button>
+                                <button type="submit">Виж тайните</button>
                             </form>
                         {% endif %}
                     {% endif %}
