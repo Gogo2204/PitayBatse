@@ -21,6 +21,3 @@ db.sqlite3-journal
 .vscode/
 .idea/
 .DS_Store
-
-# Internal project notes (kept local, never committed)
-CLAUDE.md
