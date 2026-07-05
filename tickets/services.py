@@ -131,7 +131,7 @@ def assign_main_expert(ticket, expert, actor=None):
             ticket,
             Status.IN_PROGRESS,
             actor=actor or expert,
-            reason="Назначен е експерт.",
+            reason="Роди се пустиняк.",
         )
     return ticket
 
