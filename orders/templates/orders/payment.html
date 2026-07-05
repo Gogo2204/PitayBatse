@@ -20,13 +20,40 @@
             <li><span>Сума за плащане:</span> <strong>{{ order.amount }} €</strong></li>
         </ul>
 
-        <div class="modal-actions">
-            <form method="post">
+        {% if card_form %}
+            <form method="post" novalidate>
                 {% csrf_token %}
-                <button type="submit">Плати</button>
+
+                {% if card_form.non_field_errors %}
+                    <div class="form-errors">
+                        {% for error in card_form.non_field_errors %}<p>{{ error }}</p>{% endfor %}
+                    </div>
+                {% endif %}
+
+                {% for field in card_form %}
+                    <div class="form-row">
+                        <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                        {{ field }}
+                        {% for error in field.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+                    </div>
+                {% endfor %}
+
+                <p class="help-text">Демо режим — не въвеждай истинска карта.</p>
+
+                <div class="modal-actions">
+                    <button type="submit">Плати</button>
+                    <a class="button-secondary" href="{% url 'accounts:dashboard' %}">Отмени</a>
+                </div>
             </form>
-            <a class="button-secondary" href="{% url 'accounts:dashboard' %}">Отмени</a>
-        </div>
+        {% else %}
+            <div class="modal-actions">
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit">Плати</button>
+                </form>
+                <a class="button-secondary" href="{% url 'accounts:dashboard' %}">Отмени</a>
+            </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

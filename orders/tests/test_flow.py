@@ -75,7 +75,7 @@ class OrderFlowTests(TestCase):
             user=self.user,
             service=self.one_time,
             amount=self.one_time.price,
-            payment_method=Order.PaymentMethod.CARD,
+            payment_method=Order.PaymentMethod.PAYPAL,
         )
         response = self.client.post(reverse("orders:pay", args=[order.pk]))
         order.refresh_from_db()

@@ -1,3 +1,4 @@
 from .order import OrderForm
+from .payment import CardPaymentForm
 
-__all__ = ["OrderForm"]
+__all__ = ["CardPaymentForm", "OrderForm"]
