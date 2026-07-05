@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 
@@ -33,6 +34,10 @@ def pay_order(request, order_id):
         result = gateway.charge(order)
         if result.success:
             order.mark_paid()
+            messages.success(
+                request,
+                "Плащането мина, баце! Сега опиши какво да свършим.",
+            )
             return redirect("tickets:create", order_id=order.pk)
         order.status = Order.Status.FAILED
         order.save(update_fields=["status"])

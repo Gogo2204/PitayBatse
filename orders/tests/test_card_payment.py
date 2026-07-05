@@ -62,6 +62,15 @@ class CardPaymentTests(TestCase):
         self.assertIsNotNone(order.paid_at)
         self.assertRedirects(response, reverse("tickets:create", args=[order.pk]))
 
+    def test_success_message_carried_through_redirect(self):
+        order = self._card_order()
+        response = self.client.post(
+            reverse("orders:pay", args=[order.pk]), self._valid_card(), follow=True
+        )
+        stored = list(response.context["messages"])
+        self.assertEqual(len(stored), 1)
+        self.assertIn("Плащането мина, баце", str(stored[0]))
+
     def test_invalid_card_number_blocks_payment(self):
         order = self._card_order()
         response = self.client.post(

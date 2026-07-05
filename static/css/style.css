@@ -219,17 +219,28 @@ h2 {
     color: var(--color-muted);
 }
 
-.flash {
+/* Flash messages */
+.messages {
     margin-bottom: var(--space);
 }
 
-.flash-msg {
+.alert {
     margin: 0 0 0.5rem;
     padding: 0.5rem 0.75rem;
-    border: 1px solid #b7e0c0;
+    border: 1px solid var(--color-border);
     border-radius: var(--radius);
+}
+
+.message-success {
+    border-color: #b7e0c0;
     background: #dff1e2;
     color: #1e7e34;
+}
+
+.message-error {
+    border-color: #f0c1bc;
+    background: #fbe0dd;
+    color: #b71c1c;
 }
 
 @media (max-width: 700px) {
