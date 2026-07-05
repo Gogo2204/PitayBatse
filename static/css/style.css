@@ -500,22 +500,33 @@ button[type="submit"]:hover {
 }
 
 /* Service catalog */
-.department-section {
-    margin-bottom: calc(var(--space) * 2);
-}
-
-.department-desc {
-    margin-top: -0.25rem;
-    color: var(--color-muted);
-}
-
 .service-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: var(--space);
     margin: 0;
     padding: 0;
     list-style: none;
+}
+
+@media (max-width: 1000px) {
+    .service-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.service-dept {
+    align-self: flex-start;
+    margin-bottom: 0.4rem;
+    padding: 0.1rem 0.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 3px;
+    background: #f0f2f5;
+    color: var(--color-muted);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
 }
 
 .service-card {
