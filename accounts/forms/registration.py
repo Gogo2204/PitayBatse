@@ -28,6 +28,13 @@ class RegistrationForm(UserCreationForm):
         self.fields["password1"].label = "Парола"
         self.fields["password2"].label = "Повторете паролата"
 
+        self.fields["username"].widget.attrs["autocomplete"] = "username"
+        self.fields["first_name"].widget.attrs["autocomplete"] = "given-name"
+        self.fields["last_name"].widget.attrs["autocomplete"] = "family-name"
+        self.fields["email"].widget.attrs["autocomplete"] = "email"
+        self.fields["password1"].widget.attrs["autocomplete"] = "new-password"
+        self.fields["password2"].widget.attrs["autocomplete"] = "new-password"
+
     def save(self, commit=True):
         user = super().save(commit=False)
         user.role = User.Role.CLIENT

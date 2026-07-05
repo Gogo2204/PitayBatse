@@ -374,6 +374,15 @@ textarea:focus {
     border-color: var(--color-accent);
 }
 
+/* Suppress Safari's contacts AutoFill button inside inputs */
+input::-webkit-contacts-auto-fill-button {
+    visibility: hidden;
+    display: none !important;
+    pointer-events: none;
+    position: absolute;
+    right: 0;
+}
+
 textarea {
     width: 100%;
     min-height: 6rem;
