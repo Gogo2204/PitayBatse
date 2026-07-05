@@ -22,7 +22,7 @@
                     {% for field in profile_form %}
                         {% if field.name != "avatar" %}
                             <div class="form-row">
-                                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %}<span class="required-mark" aria-hidden="true">*</span>{% endif %}</label>
                                 {{ field }}
                                 {% for error in field.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
                             </div>
@@ -64,7 +64,7 @@
 
                     {% for field in password_form %}
                         <div class="form-row">
-                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %}<span class="required-mark" aria-hidden="true">*</span>{% endif %}</label>
                             {{ field }}
                             {% for error in field.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
                         </div>

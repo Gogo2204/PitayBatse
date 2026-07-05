@@ -470,6 +470,12 @@ input[type="file"]::-webkit-file-upload-button {
     font-size: 0.9rem;
 }
 
+.required-mark {
+    margin-left: 0.15rem;
+    color: var(--color-danger);
+    text-decoration: none;
+}
+
 .field-error {
     margin: 0.25rem 0 0;
 }

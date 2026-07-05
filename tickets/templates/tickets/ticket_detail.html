@@ -69,9 +69,9 @@
                         {% for field in reply_form %}
                             <div class="form-row">
                                 {% if field.field.widget.input_type == "checkbox" %}
-                                    <label class="inline-check">{{ field }} {{ field.label }}</label>
+                                    <label class="inline-check">{{ field }} {{ field.label }}{% if field.field.required %}<span class="required-mark" aria-hidden="true">*</span>{% endif %}</label>
                                 {% else %}
-                                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                    <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %}<span class="required-mark" aria-hidden="true">*</span>{% endif %}</label>
                                     {{ field }}
                                 {% endif %}
                                 {% for err in field.errors %}<p class="field-error">{{ err }}</p>{% endfor %}
