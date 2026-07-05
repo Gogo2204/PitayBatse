@@ -58,8 +58,11 @@ def create(request, order_id):
     if order.status != Order.Status.PAID:
         return redirect("orders:pay", order_id=order.pk)
 
-    if hasattr(order, "ticket"):
-        return redirect("tickets:detail", public_id=order.ticket.public_id)
+    # One-time orders yield at most one ticket; subscriptions allow many.
+    if not order.service.is_subscription:
+        existing = order.tickets.first()
+        if existing is not None:
+            return redirect("tickets:detail", public_id=existing.public_id)
 
     if request.method == "POST":
         form = TicketCreateForm(request.POST, request.FILES)

@@ -55,6 +55,7 @@
                         <th>Сума</th>
                         <th>Плащане</th>
                         <th>Дата</th>
+                        <th>Действие</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -64,6 +65,13 @@
                             <td>{{ order.amount }} €</td>
                             <td><span class="badge badge-{{ order.status }}">{{ order.get_status_display }}</span></td>
                             <td>{{ order.created_at|date:"d.m.Y" }}</td>
+                            <td>
+                                {% if order.status == 'paid' and order.service.is_subscription %}
+                                    <a href="{% url 'tickets:create' order.pk %}">Нов тикет</a>
+                                {% else %}
+                                    —
+                                {% endif %}
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>

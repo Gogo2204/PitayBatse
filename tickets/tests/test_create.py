@@ -138,6 +138,21 @@ class TicketCreateViewTests(TestCase):
         )
         self.assertEqual(Ticket.objects.filter(order=order).count(), 1)
 
+    def test_subscription_order_allows_multiple_tickets(self):
+        self.client.force_login(self.user)
+        order = self._order(
+            self.subscription_service, billing_cycle=Order.BillingCycle.MONTHLY
+        )
+        self.client.post(
+            reverse("tickets:create", args=[order.pk]),
+            self._valid_payload(name="Първи тикет"),
+        )
+        self.client.post(
+            reverse("tickets:create", args=[order.pk]),
+            self._valid_payload(name="Втори тикет"),
+        )
+        self.assertEqual(order.tickets.count(), 2)
+
     def test_post_with_attachment_creates_attachment(self):
         self.client.force_login(self.user)
         order = self._order(self.one_time_service)

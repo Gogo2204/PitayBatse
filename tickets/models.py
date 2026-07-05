@@ -21,10 +21,10 @@ class Ticket(models.Model):
 
     public_id = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=200)
-    order = models.OneToOneField(
+    order = models.ForeignKey(
         "orders.Order",
         on_delete=models.CASCADE,
-        related_name="ticket",
+        related_name="tickets",
     )
     client = models.ForeignKey(
         settings.AUTH_USER_MODEL,
