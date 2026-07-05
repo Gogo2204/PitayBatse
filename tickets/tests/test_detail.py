@@ -121,12 +121,47 @@ class ResolvedVisibilityTests(TicketDetailBase):
         self.assertNotContains(response, 'value="resolve"')
         self.assertContains(response, "приключен")
 
-    def test_expert_controls_visible_when_resolved(self):
+    def test_reply_form_hidden_for_expert_when_resolved_but_status_control_stays(self):
         self._resolve()
         self.client.force_login(self.expert)
         response = self.client.get(self._url())
-        self.assertContains(response, 'name="body"')
+        self.assertNotContains(response, 'name="body"')
+        self.assertContains(response, "приключен")
         self.assertContains(response, "Смени статуса")
+
+    def test_client_cannot_post_on_resolved_ticket(self):
+        self._resolve()
+        self.client.force_login(self.client_user)
+        self.client.post(self._url(), {"action": "reply", "body": "След затваряне"})
+        self.assertFalse(
+            Message.objects.filter(ticket=self.ticket, body="След затваряне").exists()
+        )
+
+    def test_expert_cannot_post_on_resolved_ticket(self):
+        self._resolve()
+        self.ticket.main_expert = self.expert
+        self.ticket.save(update_fields=["main_expert"])
+        self.client.force_login(self.expert)
+        self.client.post(
+            self._url(),
+            {"action": "reply", "body": "Експертна бележка", "is_internal": "on"},
+        )
+        self.assertFalse(
+            Message.objects.filter(
+                ticket=self.ticket, body="Експертна бележка"
+            ).exists()
+        )
+
+    def test_expert_can_post_after_reopening(self):
+        self._resolve()
+        self.client.force_login(self.expert)
+        self.client.post(
+            self._url(), {"action": "status", "status": Ticket.Status.IN_PROGRESS}
+        )
+        self.client.post(self._url(), {"action": "reply", "body": "Пак работим"})
+        self.assertTrue(
+            Message.objects.filter(ticket=self.ticket, body="Пак работим").exists()
+        )
 
 
 class ExpertActionTests(TicketDetailBase):

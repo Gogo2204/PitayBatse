@@ -63,7 +63,7 @@
                     {% endfor %}
                 </ul>
 
-                {% if expert_view or not is_resolved %}
+                {% if not is_resolved %}
                     <form method="post" enctype="multipart/form-data" novalidate>
                         {% csrf_token %}
                         <input type="hidden" name="action" value="reply">
