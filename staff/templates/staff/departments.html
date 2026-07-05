@@ -1,6 +1,6 @@
 {% extends "staff/base_staff.html" %}
 
-{% block title %}Отдели — Баце панел{% endblock %}
+{% block title %}Отдели - Баце панел{% endblock %}
 
 {% block staff_content %}
 <h2>Отдели</h2>
@@ -17,7 +17,7 @@
             {% for department in departments %}
                 <tr>
                     <td>{{ department.name }}</td>
-                    <td>{{ department.description|default:"—" }}</td>
+                    <td>{{ department.description|default:"-" }}</td>
                 </tr>
             {% endfor %}
         </tbody>

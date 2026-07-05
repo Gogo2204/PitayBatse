@@ -1,6 +1,6 @@
 {% extends "staff/base_staff.html" %}
 
-{% block title %}Тикети — Баце панел{% endblock %}
+{% block title %}Тикети - Баце панел{% endblock %}
 
 {% block staff_content %}
 <h2>Тикети</h2>
@@ -23,12 +23,12 @@
                 {% for ticket in tickets %}
                     <tr class="{% if ticket.status == 'open' and not ticket.main_expert_id %}unassigned{% endif %}">
                         <td><a href="{% url 'tickets:detail' ticket.public_id %}">{{ ticket.name }}</a></td>
-                        <td>{% if ticket.site_url %}<a href="{{ ticket.site_url }}">{{ ticket.site_url }}</a>{% else %}—{% endif %}</td>
+                        <td>{% if ticket.site_url %}<a href="{{ ticket.site_url }}">{{ ticket.site_url }}</a>{% else %}-{% endif %}</td>
                         <td><span class="badge badge-{{ ticket.status }}">{{ ticket.get_status_display }}</span></td>
                         <td>{{ ticket.get_priority_display }}</td>
                         <td>{{ ticket.department.name }}</td>
-                        <td>{% if ticket.main_expert %}{{ ticket.main_expert.username }}{% else %}—{% endif %}</td>
-                        <td>{% if ticket.last_message_at %}преди {{ ticket.last_message_at|timesince }}{% else %}—{% endif %}</td>
+                        <td>{% if ticket.main_expert %}{{ ticket.main_expert.username }}{% else %}-{% endif %}</td>
+                        <td>{% if ticket.last_message_at %}преди {{ ticket.last_message_at|timesince }}{% else %}-{% endif %}</td>
                     </tr>
                 {% endfor %}
             </tbody>

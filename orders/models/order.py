@@ -56,7 +56,7 @@ class Order(models.Model):
         ordering = ["-created_at"]
 
     def __str__(self):
-        return f"Поръчка #{self.pk} — {self.service}"
+        return f"Поръчка #{self.pk} - {self.service}"
 
     def clean(self):
         super().clean()

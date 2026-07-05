@@ -1,6 +1,6 @@
 {% extends "staff/base_staff.html" %}
 
-{% block title %}Логове — Баце панел{% endblock %}
+{% block title %}Логове - Баце панел{% endblock %}
 
 {% block staff_content %}
 {% if page_obj.object_list %}
@@ -17,7 +17,7 @@
                 {% for entry in page_obj %}
                     <tr>
                         <td>{{ entry.created_at|date:"d.m.Y H:i" }}</td>
-                        <td>{% if entry.actor %}{{ entry.actor.username }}{% else %}—{% endif %}</td>
+                        <td>{% if entry.actor %}{{ entry.actor.username }}{% else %}-{% endif %}</td>
                         <td>{{ entry.description }}</td>
                     </tr>
                 {% endfor %}

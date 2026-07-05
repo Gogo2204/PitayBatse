@@ -28,7 +28,7 @@ def pay_order(request, order_id):
                     {"order": order, "card_form": card_form, "error": None},
                 )
             # Card details are validated for format only and deliberately
-            # discarded here — never stored, logged, or passed onward.
+            # discarded here - never stored, logged, or passed onward.
 
         gateway = get_payment_gateway(order.payment_method)
         result = gateway.charge(order)

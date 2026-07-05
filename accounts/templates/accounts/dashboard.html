@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Табло — ПитайБаце{% endblock %}
+{% block title %}Табло - ПитайБаце{% endblock %}
 
 {% block content %}
 <section class="dashboard">
@@ -30,8 +30,8 @@
                             <td><span class="badge badge-{{ ticket.status }}">{{ ticket.get_status_display }}</span></td>
                             <td>{{ ticket.get_priority_display }}</td>
                             <td>{{ ticket.department.name }}</td>
-                            <td>{% if ticket.last_message_at %}преди {{ ticket.last_message_at|timesince }}{% else %}—{% endif %}</td>
-                            <td>{% if ticket.deadline %}{{ ticket.deadline|date:"d.m.Y" }}{% else %}—{% endif %}</td>
+                            <td>{% if ticket.last_message_at %}преди {{ ticket.last_message_at|timesince }}{% else %}-{% endif %}</td>
+                            <td>{% if ticket.deadline %}{{ ticket.deadline|date:"d.m.Y" }}{% else %}-{% endif %}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -69,7 +69,7 @@
                                 {% if order.status == 'paid' and order.service.is_subscription %}
                                     <a href="{% url 'tickets:create' order.pk %}">Нов тикет</a>
                                 {% else %}
-                                    —
+                                    -
                                 {% endif %}
                             </td>
                         </tr>

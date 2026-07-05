@@ -1,6 +1,6 @@
 {% extends "staff/base_staff.html" %}
 
-{% block title %}Потребители — Баце панел{% endblock %}
+{% block title %}Потребители - Баце панел{% endblock %}
 
 {% block staff_content %}
 <h2>Потребители</h2>
@@ -20,13 +20,13 @@
             {% for person in people %}
                 <tr>
                     <td>{{ person.username }}</td>
-                    <td>{{ person.email|default:"—" }}</td>
+                    <td>{{ person.email|default:"-" }}</td>
                     <td>{{ person.display_role }}</td>
-                    <td>{% if person.department %}{{ person.department.name }}{% else %}—{% endif %}</td>
+                    <td>{% if person.department %}{{ person.department.name }}{% else %}-{% endif %}</td>
                     {% if request.user.is_superuser %}
                         <td>
                             {% if person.is_superuser %}
-                                —
+                                -
                             {% elif person.role == 'expert' %}
                                 <details>
                                     <summary>Смени отдела</summary>
@@ -47,7 +47,7 @@
                                     <form method="post" action="{% url 'staff:promote_user' person.id %}" class="control-form">
                                         {% csrf_token %}
                                         <select name="department" required>
-                                            <option value="">— Изберете отдел —</option>
+                                            <option value="">- Изберете отдел -</option>
                                             {% for department in departments %}
                                                 <option value="{{ department.pk }}">{{ department.name }}</option>
                                             {% endfor %}

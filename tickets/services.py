@@ -89,7 +89,7 @@ def _notify_client(ticket, old_status, new_status, reason):
         },
     )
     send_mail(
-        f"Тикет „{ticket.name}“ — промяна на статуса",
+        f"Тикет „{ticket.name}“ - промяна на статуса",
         body,
         settings.DEFAULT_FROM_EMAIL,
         [email],

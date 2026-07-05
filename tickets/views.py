@@ -132,7 +132,7 @@ def detail(request, public_id):
         action = request.POST.get("action")
         try:
             if action == "reply":
-                # No writing in a closed ticket — an expert must reopen it first.
+                # No writing in a closed ticket - an expert must reopen it first.
                 if ticket.status == Ticket.Status.RESOLVED:
                     return redirect("tickets:detail", public_id=ticket.public_id)
                 form_class = ExpertReplyForm if expert_view else ReplyForm

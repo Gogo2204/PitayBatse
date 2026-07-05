@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Тикет — {{ ticket.name }}{% endblock %}
+{% block title %}Тикет - {{ ticket.name }}{% endblock %}
 
 {% block content %}
 <section class="ticket-detail">
@@ -19,14 +19,14 @@
                     <dt>Номер</dt><dd>#{{ ticket.short_code }}</dd>
                     <dt>Статус</dt><dd><span class="badge badge-{{ ticket.status }}">{{ ticket.get_status_display }}</span></dd>
                     <dt>Приоритет</dt><dd>{{ ticket.get_priority_display }}</dd>
-                    <dt>Води го</dt><dd>{% if ticket.main_expert %}{{ ticket.main_expert.username }}{% else %}—{% endif %}</dd>
-                    <dt>Отдел</dt><dd>{% if ticket.department %}{{ ticket.department.name }}{% else %}—{% endif %}</dd>
-                    <dt>Услуга</dt><dd>{% if ticket.order.service %}{{ ticket.order.service.name }}{% else %}—{% endif %}</dd>
-                    <dt>Сайт</dt><dd>{% if ticket.site_url %}<a href="{{ ticket.site_url }}">{{ ticket.site_url }}</a>{% else %}—{% endif %}</dd>
-                    <dt>Краен срок</dt><dd>{% if ticket.deadline %}{{ ticket.deadline|date:"d.m.Y" }}{% else %}—{% endif %}</dd>
+                    <dt>Води го</dt><dd>{% if ticket.main_expert %}{{ ticket.main_expert.username }}{% else %}-{% endif %}</dd>
+                    <dt>Отдел</dt><dd>{% if ticket.department %}{{ ticket.department.name }}{% else %}-{% endif %}</dd>
+                    <dt>Услуга</dt><dd>{% if ticket.order.service %}{{ ticket.order.service.name }}{% else %}-{% endif %}</dd>
+                    <dt>Сайт</dt><dd>{% if ticket.site_url %}<a href="{{ ticket.site_url }}">{{ ticket.site_url }}</a>{% else %}-{% endif %}</dd>
+                    <dt>Краен срок</dt><dd>{% if ticket.deadline %}{{ ticket.deadline|date:"d.m.Y" }}{% else %}-{% endif %}</dd>
                     <dt>Създаден</dt><dd>{{ ticket.created_at|date:"d.m.Y" }}</dd>
                     <dt>Последно съобщение</dt>
-                    <dd>{% if ticket.last_message_at %}преди {{ ticket.last_message_at|timesince }}{% else %}—{% endif %}</dd>
+                    <dd>{% if ticket.last_message_at %}преди {{ ticket.last_message_at|timesince }}{% else %}-{% endif %}</dd>
                 </dl>
 
                 {% if not is_resolved and not expert_view %}
@@ -157,11 +157,11 @@
                         <h3>Тайни за сайто</h3>
                         {% if reveal_credentials %}
                             <dl class="credential-list">
-                                <dt>URL за админ панел</dt><dd>{{ credential.site_admin_url|default:"—" }}</dd>
-                                <dt>Потребител за сайта</dt><dd>{{ credential.site_username|default:"—" }}</dd>
-                                <dt>Парола за сайта</dt><dd>{{ credential.site_password|default:"—" }}</dd>
-                                <dt>Потребител за хостинг</dt><dd>{{ credential.hosting_username|default:"—" }}</dd>
-                                <dt>Парола за хостинг</dt><dd>{{ credential.hosting_password|default:"—" }}</dd>
+                                <dt>URL за админ панел</dt><dd>{{ credential.site_admin_url|default:"-" }}</dd>
+                                <dt>Потребител за сайта</dt><dd>{{ credential.site_username|default:"-" }}</dd>
+                                <dt>Парола за сайта</dt><dd>{{ credential.site_password|default:"-" }}</dd>
+                                <dt>Потребител за хостинг</dt><dd>{{ credential.hosting_username|default:"-" }}</dd>
+                                <dt>Парола за хостинг</dt><dd>{{ credential.hosting_password|default:"-" }}</dd>
                             </dl>
                             <p class="help-text">Разкриването на тайните е записано в лога.</p>
                         {% else %}
