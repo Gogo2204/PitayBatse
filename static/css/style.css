@@ -694,6 +694,10 @@ button[type="submit"]:hover {
     width: 100%;
 }
 
+.modal-actions > button {
+    flex: 1;
+}
+
 .modal-actions .button-secondary {
     flex: 1;
 }

@@ -3,32 +3,37 @@
 {% block title %}Поръчка — {{ service.name }}{% endblock %}
 
 {% block content %}
-<section class="order-form">
-    <h1>Поръчка на „{{ service.name }}“</h1>
+<div class="modal-overlay">
+    <div class="modal-card">
+        <h1 class="modal-title">{{ service.name }}</h1>
 
-    <p class="order-summary">
-        <span class="service-price">{{ service.price }} €</span>
-        <span class="service-type">{{ service.get_service_type_display }}</span>
-    </p>
+        <p class="order-summary">
+            <span class="service-price">{{ service.price }} €</span>
+            <span class="service-type">{{ service.get_service_type_display }}</span>
+        </p>
 
-    <form method="post" novalidate>
-        {% csrf_token %}
+        <form method="post" novalidate>
+            {% csrf_token %}
 
-        {% if form.non_field_errors %}
-            <div class="form-errors">
-                {% for error in form.non_field_errors %}<p>{{ error }}</p>{% endfor %}
+            {% if form.non_field_errors %}
+                <div class="form-errors">
+                    {% for error in form.non_field_errors %}<p>{{ error }}</p>{% endfor %}
+                </div>
+            {% endif %}
+
+            {% for field in form %}
+                <div class="form-row">
+                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                    {{ field }}
+                    {% for error in field.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+                </div>
+            {% endfor %}
+
+            <div class="modal-actions">
+                <button type="submit">Към плащане</button>
+                <a class="button-secondary" href="{% url 'services:list' %}">Отмени</a>
             </div>
-        {% endif %}
-
-        {% for field in form %}
-            <div class="form-row">
-                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                {{ field }}
-                {% for error in field.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
-            </div>
-        {% endfor %}
-
-        <button type="submit">Към плащане</button>
-    </form>
-</section>
+        </form>
+    </div>
+</div>
 {% endblock %}

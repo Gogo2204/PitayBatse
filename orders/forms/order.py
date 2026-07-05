@@ -15,6 +15,10 @@ class OrderForm(forms.ModelForm):
     def __init__(self, *args, service=None, **kwargs):
         super().__init__(*args, **kwargs)
         self.service = service
+        self.fields["payment_method"].choices = [
+            ("", "Избери начин на плащане"),
+            *Order.PaymentMethod.choices,
+        ]
         if service is not None and not service.is_subscription:
             self.fields.pop("billing_cycle", None)
         elif "billing_cycle" in self.fields:
