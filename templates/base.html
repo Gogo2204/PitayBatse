@@ -21,7 +21,7 @@
                 <li><a href="{% url 'tickets:index' %}">Тикети</a></li>
                 {% if user.is_authenticated %}
                     {% if user.is_superuser or user.role == 'expert' %}
-                        <li><a href="{% url 'staff:tickets' %}">Експертен панел</a></li>
+                        <li><a href="{% url 'staff:tickets' %}">Баце панел</a></li>
                     {% endif %}
                     <li>
                         <a class="nav-avatar" href="{% url 'accounts:profile' %}" title="Профил">
@@ -51,7 +51,7 @@
     </main>
 
     <footer class="site-footer">
-        <p>&copy; {% now "Y" %} ПитайБаце. Сичк’и пра̀ва са запàзени, ма знаа ли се кой ше ги гепи.</p>
+        <p>&copy; {% now "Y" %} ПитайБаце. Сичк’и права са запазени, ма знаа ли се кой ше ги гепи.</p>
     </footer>
 </body>
 </html>
