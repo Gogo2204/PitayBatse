@@ -31,4 +31,9 @@ class User(AbstractUser):
 
     @property
     def initials(self):
+        first = (self.first_name or "").strip()
+        last = (self.last_name or "").strip()
+        letters = first[:1] + last[:1]
+        if letters:
+            return letters.upper()
         return self.username[:2].upper()

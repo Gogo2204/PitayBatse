@@ -1,4 +1,4 @@
-from .profile import ProfileForm
+from .profile import ProfileForm, ProfilePasswordChangeForm
 from .registration import RegistrationForm
 
-__all__ = ["ProfileForm", "RegistrationForm"]
+__all__ = ["ProfileForm", "ProfilePasswordChangeForm", "RegistrationForm"]

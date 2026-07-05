@@ -162,26 +162,80 @@ h2 {
     opacity: 0.9;
 }
 
-.profile-summary {
+/* Cards */
+.card {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(27, 27, 27, 0.08);
+}
+
+.card-header {
+    padding: 0.75rem var(--space);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.card-header h2 {
+    margin: 0;
+    padding: 0;
+    border: none;
+    font-size: 1.1rem;
+}
+
+.card-body {
+    padding: var(--space);
+}
+
+/* Profile */
+.profile-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: var(--space);
+    align-items: start;
+}
+
+.card-divider {
+    margin: var(--space) 0;
+    border: none;
+    border-top: 1px solid var(--color-border);
+}
+
+.avatar-row {
     display: flex;
     align-items: center;
-    gap: var(--space);
+    flex-wrap: wrap;
+    gap: 0.75rem;
     margin-bottom: var(--space);
 }
 
-.profile-info {
-    display: grid;
-    grid-template-columns: max-content 1fr;
-    gap: 0.2rem 1rem;
-    margin: 0;
+.avatar-label {
+    font-weight: 600;
 }
 
-.profile-info dt {
+.inline-check {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
     color: var(--color-muted);
 }
 
-.profile-info dd {
-    margin: 0;
+.flash {
+    margin-bottom: var(--space);
+}
+
+.flash-msg {
+    margin: 0 0 0.5rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #b7e0c0;
+    border-radius: var(--radius);
+    background: #dff1e2;
+    color: #1e7e34;
+}
+
+@media (max-width: 700px) {
+    .profile-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* Status badges */

@@ -6,41 +6,83 @@
 <section class="profile">
     <h1>Профил</h1>
 
-    <div class="profile-summary">
-        {% if user.avatar %}
-            <img class="avatar avatar-lg" src="{{ user.avatar.url }}" alt="Профилна снимка">
-        {% else %}
-            <span class="avatar avatar-lg avatar-initials">{{ user.initials }}</span>
-        {% endif %}
-        <dl class="profile-info">
-            <dt>Потребител</dt><dd>{{ user.username }}</dd>
-            <dt>Имейл</dt><dd>{{ user.email|default:"—" }}</dd>
-            <dt>Роля</dt><dd>{{ user.get_role_display }}{% if user.is_superuser %} (админ){% endif %}</dd>
-        </dl>
+    {% if messages %}
+        <div class="flash">
+            {% for message in messages %}<p class="flash-msg">{{ message }}</p>{% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="profile-grid">
+        <div class="card">
+            <div class="card-header"><h2>Информация</h2></div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data" novalidate>
+                    {% csrf_token %}
+
+                    {% if profile_form.non_field_errors %}
+                        <div class="form-errors">
+                            {% for error in profile_form.non_field_errors %}<p>{{ error }}</p>{% endfor %}
+                        </div>
+                    {% endif %}
+
+                    {% for field in profile_form %}
+                        {% if field.name != "avatar" and field.name != "delete_avatar" %}
+                            <div class="form-row">
+                                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                                {{ field }}
+                                {% for error in field.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+
+                    <hr class="card-divider">
+
+                    <div class="avatar-row">
+                        <span class="avatar-label">Снимка</span>
+                        {% if user.avatar %}
+                            <img class="avatar" src="{{ user.avatar.url }}" alt="Профилна снимка">
+                        {% else %}
+                            <span class="avatar avatar-initials">{{ user.initials }}</span>
+                        {% endif %}
+                        <label class="inline-check">
+                            {{ profile_form.delete_avatar }} {{ profile_form.delete_avatar.label }}
+                        </label>
+                    </div>
+                    <div class="form-row">
+                        <label for="{{ profile_form.avatar.id_for_label }}">Нова снимка</label>
+                        {{ profile_form.avatar }}
+                        {% for error in profile_form.avatar.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+                    </div>
+
+                    <button type="submit">Запази</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header"><h2>Парола</h2></div>
+            <div class="card-body">
+                <form method="post" action="{% url 'accounts:password_change' %}" novalidate>
+                    {% csrf_token %}
+
+                    {% if password_form.non_field_errors %}
+                        <div class="form-errors">
+                            {% for error in password_form.non_field_errors %}<p>{{ error }}</p>{% endfor %}
+                        </div>
+                    {% endif %}
+
+                    {% for field in password_form %}
+                        <div class="form-row">
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {{ field }}
+                            {% for error in field.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
+                        </div>
+                    {% endfor %}
+
+                    <button type="submit">Смени</button>
+                </form>
+            </div>
+        </div>
     </div>
-
-    <h2>Редактиране</h2>
-    <form method="post" enctype="multipart/form-data" novalidate>
-        {% csrf_token %}
-
-        {% if form.non_field_errors %}
-            <div class="form-errors">
-                {% for error in form.non_field_errors %}<p>{{ error }}</p>{% endfor %}
-            </div>
-        {% endif %}
-
-        {% for field in form %}
-            <div class="form-row">
-                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                {{ field }}
-                {% for error in field.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
-            </div>
-        {% endfor %}
-
-        <button type="submit">Запази</button>
-    </form>
-
-    <h2>Смяна на парола</h2>
-    <p><a href="{% url 'accounts:password_change' %}">Смени паролата си</a></p>
 </section>
 {% endblock %}
