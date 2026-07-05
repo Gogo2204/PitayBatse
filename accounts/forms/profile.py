@@ -7,9 +7,7 @@ MAX_AVATAR_SIZE = 2 * 1024 * 1024
 
 
 class ProfileForm(forms.ModelForm):
-    delete_avatar = forms.BooleanField(required=False, label="Изтрий снимката")
-
-    field_order = ["username", "email", "first_name", "last_name", "avatar", "delete_avatar"]
+    field_order = ["username", "email", "first_name", "last_name", "avatar"]
 
     class Meta:
         model = User
@@ -33,16 +31,6 @@ class ProfileForm(forms.ModelForm):
         if avatar and hasattr(avatar, "size") and avatar.size > MAX_AVATAR_SIZE:
             raise forms.ValidationError("Снимката е твърде голяма (максимум 2 MB).")
         return avatar
-
-    def save(self, commit=True):
-        user = super().save(commit=False)
-        if self.cleaned_data.get("delete_avatar") and not self.files.get("avatar"):
-            if user.avatar:
-                user.avatar.delete(save=False)
-            user.avatar = None
-        if commit:
-            user.save()
-        return user
 
 
 class ProfilePasswordChangeForm(PasswordChangeForm):

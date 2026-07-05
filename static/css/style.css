@@ -212,13 +212,6 @@ h2 {
     font-weight: 600;
 }
 
-.inline-check {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    color: var(--color-muted);
-}
-
 .flash {
     margin-bottom: var(--space);
 }

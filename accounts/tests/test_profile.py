@@ -87,19 +87,6 @@ class ProfileViewTests(TestCase):
             self.user.refresh_from_db()
             self.assertTrue(self.user.avatar.name.startswith("avatars/"))
 
-    def test_delete_avatar_checkbox_clears_it(self):
-        self.client.force_login(self.user)
-        with override_settings(MEDIA_ROOT=tempfile.mkdtemp()):
-            self.client.post(reverse("accounts:profile"), self._payload(avatar=make_image()))
-            self.user.refresh_from_db()
-            self.assertTrue(self.user.avatar)
-
-            self.client.post(
-                reverse("accounts:profile"), self._payload(delete_avatar="on")
-            )
-            self.user.refresh_from_db()
-            self.assertFalse(self.user.avatar)
-
     def test_names_required(self):
         self.client.force_login(self.user)
         response = self.client.post(
