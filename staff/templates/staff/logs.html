@@ -9,9 +9,7 @@
             <thead>
                 <tr>
                     <th>Дата</th>
-                    <th>Действие</th>
                     <th>Кой</th>
-                    <th>Тикет</th>
                     <th>Описание</th>
                 </tr>
             </thead>
@@ -19,9 +17,7 @@
                 {% for entry in page_obj %}
                     <tr>
                         <td>{{ entry.created_at|date:"d.m.Y H:i" }}</td>
-                        <td>{{ entry.action }}</td>
                         <td>{% if entry.actor %}{{ entry.actor.username }}{% else %}—{% endif %}</td>
-                        <td>{% if entry.ticket %}{{ entry.ticket.name }}{% else %}—{% endif %}</td>
                         <td>{{ entry.description }}</td>
                     </tr>
                 {% endfor %}
