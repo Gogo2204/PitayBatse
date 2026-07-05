@@ -31,7 +31,7 @@
                             <td>{{ ticket.get_priority_display }}</td>
                             <td>{{ ticket.department.name }}</td>
                             <td>{% if ticket.last_message_at %}преди {{ ticket.last_message_at|timesince }}{% else %}—{% endif %}</td>
-                            <td>{% if ticket.deadline %}{{ ticket.deadline|date:"d.m.Y H:i" }}{% else %}—{% endif %}</td>
+                            <td>{% if ticket.deadline %}{{ ticket.deadline|date:"d.m.Y" }}{% else %}—{% endif %}</td>
                         </tr>
                     {% endfor %}
                 </tbody>

@@ -56,13 +56,11 @@ class TicketCreateForm(forms.Form):
         label="Описание на проблема",
         widget=forms.Textarea(attrs={"rows": 6}),
     )
-    deadline = forms.DateTimeField(
+    deadline = forms.DateField(
         required=False,
         label="Краен срок (по избор)",
-        widget=forms.DateTimeInput(
-            attrs={"type": "datetime-local"}, format="%Y-%m-%dT%H:%M"
-        ),
-        input_formats=["%Y-%m-%dT%H:%M"],
+        widget=forms.DateInput(attrs={"type": "date"}, format="%Y-%m-%d"),
+        input_formats=["%Y-%m-%d"],
     )
     attachments = MultipleFileField(
         required=False, label="Прикачи файл", validators=[validate_upload]

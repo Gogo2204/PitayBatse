@@ -4,6 +4,7 @@ from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, override_settings
 from django.urls import reverse
+from django.utils import timezone
 
 from departments.models import Department
 from orders.models import Order
@@ -139,6 +140,19 @@ class TicketCreateViewTests(TestCase):
             self._valid_payload(name="Втори опит"),
         )
         self.assertEqual(Ticket.objects.filter(order=order).count(), 1)
+
+    def test_deadline_accepts_a_date_only_value(self):
+        self.client.force_login(self.user)
+        order = self._order(self.one_time_service)
+        self.client.post(
+            reverse("tickets:create", args=[order.pk]),
+            self._valid_payload(deadline="2040-12-31"),
+        )
+        ticket = Ticket.objects.get(order=order)
+        self.assertIsNotNone(ticket.deadline)
+        self.assertEqual(
+            timezone.localtime(ticket.deadline).date().isoformat(), "2040-12-31"
+        )
 
     def test_site_url_is_required(self):
         self.client.force_login(self.user)
