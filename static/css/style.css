@@ -486,6 +486,22 @@ button[type="submit"]:hover {
     background: #17497e;
 }
 
+/* Secondary button: same shape as primary, quiet styling */
+.button-secondary {
+    padding: 0.55rem 1.1rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: #fff;
+    color: var(--color-text);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.button-secondary:hover {
+    background: #f0f2f5;
+}
+
 /* Shared button-styled link */
 .button {
     display: inline-block;

@@ -38,6 +38,7 @@
                                             {% endfor %}
                                         </select>
                                         <button type="submit">Потвърди</button>
+                                        <button type="button" class="button-secondary" onclick="this.form.reset(); this.closest('details').removeAttribute('open')">Отмени</button>
                                     </form>
                                 </details>
                             {% else %}
@@ -52,6 +53,7 @@
                                             {% endfor %}
                                         </select>
                                         <button type="submit">Потвърди</button>
+                                        <button type="button" class="button-secondary" onclick="this.form.reset(); this.closest('details').removeAttribute('open')">Отмени</button>
                                     </form>
                                 </details>
                             {% endif %}
