@@ -175,11 +175,12 @@ h2 {
     border-bottom: 1px solid var(--color-border);
 }
 
+.card-header h1,
 .card-header h2 {
     margin: 0;
     padding: 0;
     border: none;
-    font-size: 1.1rem;
+    font-size: 1.15rem;
 }
 
 .card-body {
@@ -721,7 +722,19 @@ button[type="submit"]:hover {
 
 /* Ticket form */
 .ticket-form {
-    max-width: 34rem;
+    max-width: 640px;
+    margin: 0 auto;
+}
+
+.form-section-title {
+    margin: calc(var(--space) * 1.5) 0 var(--space);
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--color-border);
+    font-size: 1.1rem;
+}
+
+.form-section-title:first-of-type {
+    margin-top: 0;
 }
 
 .notices {

@@ -4,32 +4,42 @@
 
 {% block content %}
 <section class="ticket-form">
-    <h1>Нов тикет за „{{ service.name }}“</h1>
+    <div class="card">
+        <div class="card-header"><h1>Нов тикет за „{{ service.name }}“</h1></div>
+        <div class="card-body">
+            {% if notices %}
+                <div class="notices">
+                    {% for notice in notices %}<p>{{ notice }}</p>{% endfor %}
+                </div>
+            {% endif %}
 
-    {% if notices %}
-        <div class="notices">
-            {% for notice in notices %}<p>{{ notice }}</p>{% endfor %}
+            <form method="post" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                    <div class="form-errors">
+                        {% for error in form.non_field_errors %}<p>{{ error }}</p>{% endfor %}
+                    </div>
+                {% endif %}
+
+                <h2 class="form-section-title">За проблема</h2>
+                {% include "tickets/_form_field.html" with field=form.name %}
+                {% include "tickets/_form_field.html" with field=form.site_url %}
+                {% include "tickets/_form_field.html" with field=form.description %}
+                {% include "tickets/_form_field.html" with field=form.deadline %}
+                {% include "tickets/_form_field.html" with field=form.attachments %}
+
+                <h2 class="form-section-title">Тайни за сайто</h2>
+                <p class="help-text">Достъпите се пазят криптирани и се разкриват само на назначения експерт.</p>
+                {% include "tickets/_form_field.html" with field=form.site_admin_url %}
+                {% include "tickets/_form_field.html" with field=form.site_username %}
+                {% include "tickets/_form_field.html" with field=form.site_password %}
+                {% include "tickets/_form_field.html" with field=form.hosting_username %}
+                {% include "tickets/_form_field.html" with field=form.hosting_password %}
+
+                <button type="submit">Създай тикет</button>
+            </form>
         </div>
-    {% endif %}
-
-    <form method="post" enctype="multipart/form-data" novalidate>
-        {% csrf_token %}
-
-        {% if form.non_field_errors %}
-            <div class="form-errors">
-                {% for error in form.non_field_errors %}<p>{{ error }}</p>{% endfor %}
-            </div>
-        {% endif %}
-
-        {% for field in form %}
-            <div class="form-row">
-                <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %}<span class="required-mark" aria-hidden="true">*</span>{% endif %}</label>
-                {{ field }}
-                {% for error in field.errors %}<p class="field-error">{{ error }}</p>{% endfor %}
-            </div>
-        {% endfor %}
-
-        <button type="submit">Създай тикет</button>
-    </form>
+    </div>
 </section>
 {% endblock %}
