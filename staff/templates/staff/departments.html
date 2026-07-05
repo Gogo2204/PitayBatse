@@ -10,7 +10,6 @@
         <thead>
             <tr>
                 <th>Име</th>
-                <th>Идентификатор</th>
                 <th>Описание</th>
             </tr>
         </thead>
@@ -18,7 +17,6 @@
             {% for department in departments %}
                 <tr>
                     <td>{{ department.name }}</td>
-                    <td>{{ department.slug }}</td>
                     <td>{{ department.description|default:"—" }}</td>
                 </tr>
             {% endfor %}
