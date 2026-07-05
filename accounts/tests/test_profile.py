@@ -25,6 +25,18 @@ class InitialsTests(TestCase):
         self.assertEqual(User(username="pesho").initials, "PE")
 
 
+class DisplayRoleTests(TestCase):
+    def test_superuser_shows_admin(self):
+        user = User(username="admin", role=User.Role.CLIENT, is_superuser=True)
+        self.assertEqual(user.display_role, "Админ")
+
+    def test_client_shows_role_label(self):
+        self.assertEqual(User(username="c", role=User.Role.CLIENT).display_role, "Клиент")
+
+    def test_expert_shows_role_label(self):
+        self.assertEqual(User(username="e", role=User.Role.EXPERT).display_role, "Експерт")
+
+
 class ProfileViewTests(TestCase):
     @classmethod
     def setUpTestData(cls):

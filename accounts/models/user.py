@@ -37,3 +37,9 @@ class User(AbstractUser):
         if letters:
             return letters.upper()
         return self.username[:2].upper()
+
+    @property
+    def display_role(self):
+        if self.is_superuser:
+            return "Админ"
+        return self.get_role_display()

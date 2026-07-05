@@ -126,6 +126,14 @@ class UserManagementTests(StaffBase):
         super_response = self.client.get(reverse("staff:users"))
         self.assertContains(super_response, "Направи пустиняк")
 
+    def test_superuser_role_renders_as_admin(self):
+        self.client.force_login(self.superuser)
+        response = self.client.get(reverse("staff:users"))
+        self.assertContains(response, "Админ")
+        self.assertNotContains(response, "(админ)")
+        self.assertContains(response, "Експерт")
+        self.assertContains(response, "Клиент")
+
     def test_expert_gets_403_on_promote_endpoint(self):
         self.client.force_login(self.expert_x)
         response = self.client.post(

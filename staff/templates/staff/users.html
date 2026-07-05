@@ -21,7 +21,7 @@
                 <tr>
                     <td>{{ person.username }}</td>
                     <td>{{ person.email|default:"—" }}</td>
-                    <td>{{ person.get_role_display }}{% if person.is_superuser %} (админ){% endif %}</td>
+                    <td>{{ person.display_role }}</td>
                     <td>{% if person.department %}{{ person.department.name }}{% else %}—{% endif %}</td>
                     {% if request.user.is_superuser %}
                         <td>
