@@ -380,6 +380,46 @@ textarea {
     resize: vertical;
 }
 
+/* File inputs styled like a text field with an embedded button */
+input[type="file"] {
+    width: 100%;
+    padding: 0;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    background: #fff;
+    color: var(--color-text);
+    font: inherit;
+    cursor: pointer;
+}
+
+input[type="file"]::file-selector-button {
+    margin: 0 0.75rem 0 0;
+    padding: 0.5rem 0.9rem;
+    border: none;
+    border-right: 1px solid var(--color-border);
+    border-radius: var(--radius) 0 0 var(--radius);
+    background: #f0f2f5;
+    color: var(--color-text);
+    font: inherit;
+    cursor: pointer;
+}
+
+input[type="file"]::file-selector-button:hover {
+    background: #e6e9ee;
+}
+
+input[type="file"]::-webkit-file-upload-button {
+    margin: 0 0.75rem 0 0;
+    padding: 0.5rem 0.9rem;
+    border: none;
+    border-right: 1px solid var(--color-border);
+    border-radius: var(--radius) 0 0 var(--radius);
+    background: #f0f2f5;
+    color: var(--color-text);
+    font: inherit;
+    cursor: pointer;
+}
+
 .form-row {
     display: flex;
     flex-direction: column;
