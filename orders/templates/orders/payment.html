@@ -3,25 +3,30 @@
 {% block title %}Плащане — Поръчка #{{ order.pk }}{% endblock %}
 
 {% block content %}
-<section class="payment">
-    <h1>Плащане</h1>
+<div class="modal-overlay">
+    <div class="modal-card">
+        <h1 class="modal-title">Плащане</h1>
 
-    {% if error %}
-        <div class="form-errors"><p>{{ error }}</p></div>
-    {% endif %}
-
-    <ul class="payment-details">
-        <li><span>Услуга:</span> {{ order.service.name }}</li>
-        {% if order.billing_cycle %}
-            <li><span>Период:</span> {{ order.get_billing_cycle_display }}</li>
+        {% if error %}
+            <div class="form-errors"><p>{{ error }}</p></div>
         {% endif %}
-        <li><span>Начин на плащане:</span> {{ order.get_payment_method_display }}</li>
-        <li><span>Сума за плащане:</span> <strong>{{ order.amount }} €</strong></li>
-    </ul>
 
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit">Плати</button>
-    </form>
-</section>
+        <ul class="payment-details">
+            <li><span>Услуга:</span> {{ order.service.name }}</li>
+            {% if order.billing_cycle %}
+                <li><span>Период:</span> {{ order.get_billing_cycle_display }}</li>
+            {% endif %}
+            <li><span>Начин на плащане:</span> {{ order.get_payment_method_display }}</li>
+            <li><span>Сума за плащане:</span> <strong>{{ order.amount }} €</strong></li>
+        </ul>
+
+        <div class="modal-actions">
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit">Плати</button>
+            </form>
+            <a class="button-secondary" href="{% url 'accounts:dashboard' %}">Отмени</a>
+        </div>
+    </div>
+</div>
 {% endblock %}

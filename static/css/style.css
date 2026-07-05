@@ -486,8 +486,9 @@ button[type="submit"]:hover {
     background: #17497e;
 }
 
-/* Secondary button: same shape as primary, quiet styling */
+/* Secondary button: same shape as primary, quiet styling (works as button or link) */
 .button-secondary {
+    display: inline-block;
     padding: 0.55rem 1.1rem;
     border: 1px solid var(--color-border);
     border-radius: var(--radius);
@@ -495,11 +496,14 @@ button[type="submit"]:hover {
     color: var(--color-text);
     font: inherit;
     font-weight: 600;
+    text-align: center;
+    text-decoration: none;
     cursor: pointer;
 }
 
 .button-secondary:hover {
     background: #f0f2f5;
+    text-decoration: none;
 }
 
 /* Shared button-styled link */
@@ -647,6 +651,51 @@ button[type="submit"]:hover {
 
 .payment-details span {
     color: var(--color-muted);
+}
+
+/* Payment modal */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space);
+    overflow-y: auto;
+    background: rgba(0, 0, 0, 0.45);
+}
+
+.modal-card {
+    width: 100%;
+    max-width: 420px;
+    padding: calc(var(--space) * 1.5);
+    background: #fff;
+    border-radius: var(--radius);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+}
+
+.modal-title {
+    margin-top: 0;
+}
+
+.modal-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: var(--space);
+}
+
+.modal-actions form {
+    flex: 1;
+    margin: 0;
+}
+
+.modal-actions form button {
+    width: 100%;
+}
+
+.modal-actions .button-secondary {
+    flex: 1;
 }
 
 /* Ticket form */
