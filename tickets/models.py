@@ -139,4 +139,4 @@ class Credential(models.Model):
     hosting_password = EncryptedTextField(blank=True)
 
     def __str__(self):
-        return f"Достъпи за тикет #{self.ticket_id}"
+        return f"Тайни за тикет #{self.ticket_id}"
