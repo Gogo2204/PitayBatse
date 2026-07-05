@@ -19,6 +19,7 @@
                     <dt>Номер</dt><dd>#{{ ticket.short_code }}</dd>
                     <dt>Статус</dt><dd><span class="badge badge-{{ ticket.status }}">{{ ticket.get_status_display }}</span></dd>
                     <dt>Приоритет</dt><dd>{{ ticket.get_priority_display }}</dd>
+                    <dt>Води го</dt><dd>{% if ticket.main_expert %}{{ ticket.main_expert.username }}{% else %}—{% endif %}</dd>
                     <dt>Отдел</dt><dd>{% if ticket.department %}{{ ticket.department.name }}{% else %}—{% endif %}</dd>
                     <dt>Услуга</dt><dd>{% if ticket.order.service %}{{ ticket.order.service.name }}{% else %}—{% endif %}</dd>
                     <dt>Краен срок</dt><dd>{% if ticket.deadline %}{{ ticket.deadline|date:"d.m.Y H:i" }}{% else %}—{% endif %}</dd>
@@ -88,11 +89,17 @@
             <div class="card ticket-management">
                 <div class="card-header"><h2>Управление</h2></div>
                 <div class="card-body">
-                    <form method="post" class="control-form">
-                        {% csrf_token %}
-                        <input type="hidden" name="action" value="assign">
-                        <button type="submit">Поеми го</button>
-                    </form>
+                    {% if ticket.main_expert is None %}
+                        <form method="post" class="control-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="assign">
+                            <button type="submit">Поеми го</button>
+                        </form>
+                    {% else %}
+                        <p class="lead-expert">Води го:
+                            {% if ticket.main_expert_id == request.user.id %}ти{% else %}{{ ticket.main_expert.username }}{% endif %}
+                        </p>
+                    {% endif %}
 
                     <form method="post" class="control-form">
                         {% csrf_token %}

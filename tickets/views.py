@@ -149,7 +149,8 @@ def detail(request, public_id):
                 resolve(ticket, request.user)
                 return redirect("tickets:detail", public_id=ticket.public_id)
             elif action == "assign" and expert_view:
-                assign_main_expert(ticket, request.user, actor=request.user)
+                if ticket.main_expert_id is None:
+                    assign_main_expert(ticket, request.user, actor=request.user)
                 return redirect("tickets:detail", public_id=ticket.public_id)
             elif action == "status" and expert_view:
                 change_status(

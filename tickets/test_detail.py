@@ -160,6 +160,28 @@ class ExpertActionTests(TicketDetailBase):
         self.assertEqual(self.ticket.main_expert, self.expert)
         self.assertEqual(self.ticket.status, Ticket.Status.IN_PROGRESS)
 
+    def test_assign_form_hidden_once_claimed(self):
+        self.ticket.main_expert = self.expert
+        self.ticket.save(update_fields=["main_expert"])
+        self.client.force_login(self.expert)
+        response = self.client.get(self._url())
+        self.assertNotContains(response, 'value="assign"')
+        self.assertContains(response, "Води го")
+
+    def test_second_expert_cannot_reassign_claimed_ticket(self):
+        self.ticket.main_expert = self.expert
+        self.ticket.save(update_fields=["main_expert"])
+        second_expert = User.objects.create_user(
+            username="ekspert3",
+            password="Baceparola123",
+            role=User.Role.EXPERT,
+            department=self.department,
+        )
+        self.client.force_login(second_expert)
+        self.client.post(self._url(), {"action": "assign"})
+        self.ticket.refresh_from_db()
+        self.assertEqual(self.ticket.main_expert, self.expert)
+
     def test_expert_change_priority(self):
         self.client.force_login(self.expert)
         self.client.post(
