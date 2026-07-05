@@ -844,11 +844,6 @@ button[type="submit"]:hover {
     border-bottom: 2px solid var(--color-border-strong);
 }
 
-.sort-bar {
-    color: var(--color-muted);
-    font-size: 0.9rem;
-}
-
 .pagination {
     display: flex;
     gap: var(--space);

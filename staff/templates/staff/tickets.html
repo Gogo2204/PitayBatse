@@ -5,12 +5,6 @@
 {% block staff_content %}
 <h2>Тикети</h2>
 
-<p class="sort-bar">
-    Подреди по:
-    <a href="?sort=activity" class="{% if current_sort == 'activity' %}active{% endif %}">последна активност</a>
-    <a href="?sort=priority" class="{% if current_sort == 'priority' %}active{% endif %}">приоритет</a>
-</p>
-
 {% if tickets %}
     <div class="table-wrap">
         <table class="ticket-table">

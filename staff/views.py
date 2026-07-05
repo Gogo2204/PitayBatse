@@ -1,6 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.core.paginator import Paginator
-from django.db.models import Case, F, IntegerField, Value, When
+from django.db.models import F
 from django.http import HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
@@ -14,15 +14,6 @@ from .decorators import expert_required, superuser_required
 
 User = get_user_model()
 
-PRIORITY_RANK = Case(
-    When(priority=Ticket.Priority.URGENT, then=Value(0)),
-    When(priority=Ticket.Priority.HIGH, then=Value(1)),
-    When(priority=Ticket.Priority.NORMAL, then=Value(2)),
-    When(priority=Ticket.Priority.LOW, then=Value(3)),
-    default=Value(4),
-    output_field=IntegerField(),
-)
-
 
 def _department_tickets(user):
     tickets = Ticket.objects.select_related(
@@ -35,24 +26,10 @@ def _department_tickets(user):
 
 @expert_required
 def tickets(request):
-    queryset = _department_tickets(request.user).annotate(priority_rank=PRIORITY_RANK)
-
-    sort = request.GET.get("sort")
-    if sort == "priority":
-        queryset = queryset.order_by(
-            "priority_rank", F("last_message_at").desc(nulls_last=True)
-        )
-    else:
-        sort = "activity"
-        queryset = queryset.order_by(
-            F("last_message_at").desc(nulls_last=True), "-created_at"
-        )
-
-    context = {
-        "tickets": queryset,
-        "current_sort": sort,
-    }
-    return render(request, "staff/tickets.html", context)
+    queryset = _department_tickets(request.user).order_by(
+        F("last_message_at").desc(nulls_last=True), "-created_at"
+    )
+    return render(request, "staff/tickets.html", {"tickets": queryset})
 
 
 @expert_required
